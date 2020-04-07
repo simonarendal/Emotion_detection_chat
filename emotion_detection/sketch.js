@@ -1,10 +1,12 @@
+var socket;
+
 function setup() {
     loadCamera();
     loadTracker();
     loadCanvas(windowWidth,windowHeight);
     
     // From our 'webchat' sketch
-    socket = io.connect('https://dating-chat.herokuapp.com/');
+    socket = io.connect('https://emotion-detection-01.herokuapp.com');
     socket.on('mouse', newDrawing);
 }
       
