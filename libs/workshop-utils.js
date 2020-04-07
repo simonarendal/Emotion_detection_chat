@@ -35,6 +35,8 @@ function loadCamera() {
     videoInput.id("v");
     var mv = document.getElementById("v");
     mv.muted = true;
+    
+    
 }
 
 /*

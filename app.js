@@ -12,7 +12,9 @@ function handleError(error) {
     }
   }
   
+
 // (optional) add server code here
+// This connects to our heroku-app that serves the clients with sessions and tokens
 var SERVER_BASE_URL = 'https://emotion-detection-01.herokuapp.com';
 fetch(SERVER_BASE_URL + '/session').then(function(res) {
   return res.json()
@@ -23,7 +25,7 @@ fetch(SERVER_BASE_URL + '/session').then(function(res) {
   initializeSession();
 }).catch(handleError);
 
-
+// We initialize a session with our tokbox api key, and the session Id created by the heroku-app
 function initializeSession() {
     var session = OT.initSession(apiKey, sessionId);
     
@@ -38,14 +40,14 @@ function initializeSession() {
       });
       
   
-    // Create a publisher
+    // Create a publisher so the clients send/publish their webcam stream
     var publisher = OT.initPublisher('publisher', {
       insertMode: 'append',
       width: '100%',
       height: '100%'
     }, handleError);
   
-    // Connect to the session
+    // Connect to the session 
     session.connect(token, function(error) {
       // If the connection is successful, publish to the session
       if (error) {
