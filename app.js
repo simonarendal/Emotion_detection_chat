@@ -1,5 +1,16 @@
-// Here we import the node module 'http'
-//var http = require('http');
+/*
+// HTTP Portion
+var https = require('https');
+// URL module
+var url = require('url');
+var path = require('path');
+
+// Using the filesystem module
+var fs = require('fs');
+
+
+Here we import the node module 'http'
+var https = require('https');
 import { createServer } from 'https';
 import { extname } from 'path';
 
@@ -7,20 +18,14 @@ import { extname } from 'path';
 import { readFile } from 'fs';
 
 
-// replace these values with those generated in your TokBox Account
-var apiKey = "46651242";
-var sessionId = "2_MX40NjY1MTI0Mn5-MTU4NjE2NTg3NTI2MH5SaHR4amgvNlRJSHVyNzFWYXEweTh2eWN-fg";
-var token = "T1==cGFydG5lcl9pZD00NjY1MTI0MiZzaWc9NWE3YmQxNTg4MTkxZGY1YTNjNmMxMDE3MWQyMTY1NGQ2ZmEzNDQ4YTpzZXNzaW9uX2lkPTJfTVg0ME5qWTFNVEkwTW41LU1UVTROakUyTlRnM05USTJNSDVTYUhSNGFtZ3ZObFJKU0hWeU56RldZWEV3ZVRoMmVXTi1mZyZjcmVhdGVfdGltZT0xNTg2MTY3MzM5Jm5vbmNlPTAuOTQ0MjQ1OTcxNTk0NTU3JnJvbGU9c3Vic2NyaWJlciZleHBpcmVfdGltZT0xNTg2MTcwOTM4JmluaXRpYWxfbGF5b3V0X2NsYXNzX2xpc3Q9";
 
 /////////////////////////////////////////////////////////////
 
-
-
-const port = process.env.PORT || 3000
+//const port = process.env.PORT || 3000
 
 //http.createServer get passed func handleRequest and starts listining on a port
-var server = createServer(handleRequest);
-server.listen(port);
+var server = https.createServer(handleRequest);
+//server.listen(port);
 
 console.log('Server started on port 8080');
 
@@ -28,7 +33,7 @@ console.log('Server started on port 8080');
 //this function will handle the requests - this is done by receiving a request argument 
 //and acts on a response argument
 //this function is passed as a callback function for the func createServer() 
-/*This handleRequest() method will serve a p5 sketch including an index.html, sketch.js, and style.css.*/
+This handleRequest() method will serve a p5 sketch including an index.html, sketch.js, and style.css.
 function handleRequest(req, res) {
  
   // What did we request?
@@ -110,6 +115,13 @@ io.sockets.on('connection',
 
 
 /////////////////////////////////////////////////////////////
+*/
+
+// replace these values with those generated in your TokBox Account
+var apiKey = "46651242";
+var sessionId = "2_MX40NjY1MTI0Mn5-MTU4NjE2NTg3NTI2MH5SaHR4amgvNlRJSHVyNzFWYXEweTh2eWN-fg";
+var token = "T1==cGFydG5lcl9pZD00NjY1MTI0MiZzaWc9NWE3YmQxNTg4MTkxZGY1YTNjNmMxMDE3MWQyMTY1NGQ2ZmEzNDQ4YTpzZXNzaW9uX2lkPTJfTVg0ME5qWTFNVEkwTW41LU1UVTROakUyTlRnM05USTJNSDVTYUhSNGFtZ3ZObFJKU0hWeU56RldZWEV3ZVRoMmVXTi1mZyZjcmVhdGVfdGltZT0xNTg2MTY3MzM5Jm5vbmNlPTAuOTQ0MjQ1OTcxNTk0NTU3JnJvbGU9c3Vic2NyaWJlciZleHBpcmVfdGltZT0xNTg2MTcwOTM4JmluaXRpYWxfbGF5b3V0X2NsYXNzX2xpc3Q9";
+
 
 // Handling all of our errors here by alerting them
 function handleError(error) {

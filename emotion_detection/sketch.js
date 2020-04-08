@@ -5,9 +5,11 @@ function setup() {
     loadTracker();
     loadCanvas(windowWidth,windowHeight);
     
+    /*
     // From our 'webchat' sketch
     socket = io.connect('https://emotion-detection-01.herokuapp.com');
     socket.on('mouse', newDrawing);
+    */
 }
       
 function draw() {
@@ -37,7 +39,7 @@ function draw() {
     text("HAPPY", 770, 140);
     
 }
-
+/*
 function drawPoints() {
     fill(255);
     for (var i=0; i<positions.length -3; i++) {
@@ -64,3 +66,5 @@ function mouseDragged() {
   fill(255,100,0);
   ellipse(mouseX, mouseY, 20, 20);
 }
+
+*/
