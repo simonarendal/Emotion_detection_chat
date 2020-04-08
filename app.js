@@ -269,7 +269,7 @@ client.on('message', function (topic, payload) {
 		// If we get a message on the first topic, vibrate the phone
 		if(convertedPayload.clientId !== clientOptions.clientId) {
       //navigator.vibrate(500);
-      console.log('test payload received')
+      console.log('test payload received - other client joined')
 			// And after five seconds
 			setTimeout(function() {
 				// Let everyone know that you finished vibrating
