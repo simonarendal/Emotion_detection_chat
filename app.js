@@ -117,6 +117,210 @@ io.sockets.on('connection',
 /////////////////////////////////////////////////////////////
 */
 
+
+
+//////////////////////MQTT/////////////////////////////////////
+
+/*
+	AUTOMATIC IDENTIFICATION MQTT CODE
+
+	This code automatically attributes unique IDs to the different devices that
+	connect to the webpage.
+
+	It takes a while to get the unique IDs, but since it's automatic, it could save you some
+	trouble of having to setup the devices manually.
+
+	This is especially useful if you want to have more than two devices that have
+	different interfaces, e.g. an asymmetrical multiplayer game.
+
+	In practice, this code does the following:
+	1. 		Connects to MQTT
+	2. 		Asks the other connected devices(if any exist), whether they are using the current numeric ID, and waits 5000 milliseconds for an answer
+	2a. 	If it is in use, it increase the numeric ID by one, and asks again
+	2b. 	If it is not in use, or the 5000 milliseconds timer runs out,
+				it updates its visuals and sends out a vibration message to every connected client
+	3. 		If a vibration message is received, the device will vibrate (if it is supported, and if the screen has already been tapped)
+
+ */
+
+// We generate a random unique clientId when we start
+// MQTT sends messages to everyone, including ourselves, so this is a way to make sure we recognize our own messages
+var clientOptions = {
+	clientId : 'mqttjs_' + Math.random().toString(16).substr(2, 8)
+};
+
+// Uncomment one of the three following lines to choose your broker
+// var MQTTBrokerUrl = 'ws://iot.eclipse.org:80/ws';
+var MQTTBrokerUrl = 'ws://test.mosquitto.org:8080/ws';
+// var MQTTBrokerUrl = 'ws://broker.hivemq.com:8000';
+
+// We connect to it in the beginning
+// Be aware that this is not secure because it's public
+
+var client = mqtt.connect(MQTTBrokerUrl, clientOptions);
+
+// Topics can be thought of like "chat rooms", only those listening to the correct topic get the message
+// Make sure that this is very unique, so you only get your own messages
+// I.e. don't name it 'test', but instead 'JesperHyldahlFoghTest'
+// 
+var basicTopic = 'LesiEmotionChat'; // CHANGE THIS TO SOMETHING UNIQUE TO YOUR PROJECT
+
+// We use this topic when we connect only
+var connectTopic = basicTopic + '-connect';
+// You can define as many topics as you want and use them for different things
+// Remember to subscribe to them in .on('connect')!
+var firstTopic = basicTopic + '-first';
+var secondTopic = basicTopic + '-second';
+// etc...
+
+// We use a timer in order to only show the interface after we are fairly certain we have a unique ID
+var connectionTimer = null;
+
+// Since clientIds are random, we also keep a numerical ID which is easier to work with
+var numericId = 1;
+
+// When we connect we want to do something
+client.on('connect', function (connack) {
+
+	// Change status to 'finding id'
+	$('.dot-container span').text('Finding id');
+
+	// Messages are called payloads in MQTT
+	// We create a payload with our numerical ID, our random unique and a textual message
+	var payload = {
+		id : numericId,
+		clientId : clientOptions.clientId,
+		message : 'HELLO'
+	};
+	// We send/publish the message to the connection topic
+	client.publish(connectTopic, JSON.stringify(payload));
+
+	// Update the interface
+	updateTimer();
+
+	// We start subscribing/listening to the connection topic
+  client.subscribe(connectTopic, function(err) {
+    // If we get an error show it on the interface so we can see what went wrong
+    if(err) {
+    	$('.error-container').text(err);
+    }
+  })
+	// We start subscribing/listening to the first topic
+  client.subscribe(firstTopic, function(err) {
+    // If we get an error show it on the interface so we can see what went wrong
+    if(err) {
+    	$('.error-container').text(err);
+    }
+  })
+	// We start subscribing/listening to the second topic
+  client.subscribe(secondTopic, function(err) {
+    // If we get an error show it on the interface so we can see what went wrong
+    if(err) {
+    	$('.error-container').text(err);
+    }
+  })
+})
+
+// When we get any kind of message, we want to do something
+client.on('message', function (topic, payload) {
+	// The payload comes in as a Buffer(i.e. incomprehensible bytes), so we need to convert it first
+	// This happens by using JSON.parse() after converting the Buffer to a string
+	var convertedPayload = JSON.parse(payload.toString());
+
+	// If we got a payload on the connection topic, do this
+	if(topic === connectTopic) {
+
+		// If we got a payload from someone else than us, and they have the same ID as us
+		if(convertedPayload.clientId !== clientOptions.clientId && convertedPayload.id === numericId) {
+			// We get this message if someone has already claimed this ID
+			if(convertedPayload.message === 'ID_TAKEN') {
+				// Increase our ID by one
+				numericId++;
+
+				// We say hello again with our new ID
+				var helloPayload = {
+					id : numericId,
+					clientId : clientOptions.clientId,
+					message : 'HELLO'
+				};
+				// We send/publish the payload to the connection topic
+				client.publish(connectTopic, JSON.stringify(helloPayload));
+
+				// Restart the connection timer
+				updateTimer();
+
+				// Show on the interface that we did not get 
+				$('.dot-container span').text('Id ' + (numericId - 1) + ' was taken. Looking some more');
+			}
+			// We get this message if someone new comes along, or someone has gotten a new ID
+			else if(convertedPayload.message === 'HELLO') {
+				// Let everyone know that this ID is taken
+				var changePayload = {
+					id : numericId,
+					clientId : clientOptions.clientId,
+					message : 'ID_TAKEN'
+				};
+				// We send/publish the payload to the connection topic
+				client.publish(connectTopic, JSON.stringify(changePayload));
+			}
+		}
+	}
+	else if(topic === firstTopic) {
+		// If we get a message on the first topic, vibrate the phone
+		if(convertedPayload.clientId !== clientOptions.clientId) {
+      //navigator.vibrate(500);
+      console.log('test payload received')
+			// And after five seconds
+			setTimeout(function() {
+				// Let everyone know that you finished vibrating
+				var vibratePayload = {
+					id : numericId,
+					clientId : clientOptions.clientId,
+					message : 'VIBRATION_DONE'
+				};
+				// We send/publish the payload to the connection topic
+				client.publish(secondTopic, JSON.stringify(vibratePayload));
+			}, 500)
+		}
+	}
+	else if(topic === secondTopic) {
+		// If we get a message on the second topic, show where we got it from
+		if(convertedPayload.clientId !== clientOptions.clientId) {
+			$('.vibration-status').text('Client #' + convertedPayload.id + ' is done vibrating.');
+		}
+	}
+})
+
+// Sets a timer that updates the interface, if enough time has passed
+// The alternative would be to update the interface every time we are checking out a new ID
+function updateTimer() {
+	// If we already set a timer, clear it
+	if(connectionTimer !== null) clearTimeout(connectionTimer);
+	// Update the interface, if we haven't received another ID_TAKEN message within 5000 milliseconds
+	connectionTimer = setTimeout(updateConnectionStatus, 5000);
+}
+
+// Show the current connection status to the page
+function updateConnectionStatus() {
+	// Hide, show and update the appropriate 
+	$('.connecting').hide();
+	$('.message-container h3 ').show();
+	// By changing the attribute 'data-id' on the HTML body, we can change the styling. See the CSS file for more.
+	$('body').attr('data-id', numericId);
+	$('.id-elem').text(numericId);
+
+	// Let everyone know that you finished vibrating
+	var readyPayload = {
+		id : numericId,
+		clientId : clientOptions.clientId,
+		message : 'VIBRATION_START'
+	};
+	// We send/publish the payload to the connection topic
+	client.publish(firstTopic, JSON.stringify(readyPayload));
+}
+
+//////////////////////MQTT/////////////////////////////////////
+
 // replace these values with those generated in your TokBox Account
 var apiKey = "46651242";
 var sessionId = "2_MX40NjY1MTI0Mn5-MTU4NjE2NTg3NTI2MH5SaHR4amgvNlRJSHVyNzFWYXEweTh2eWN-fg";
