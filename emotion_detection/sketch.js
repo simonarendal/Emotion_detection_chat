@@ -1,4 +1,4 @@
-var socket;
+//var socket;
 var happyCounter = 0;
 var happyTreshold = 0.2;
 function setup() {
