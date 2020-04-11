@@ -7,6 +7,7 @@ let timer = 0;
 
 
 function setup() {
+ 
     loadCamera();
     loadTracker();
     loadCanvas(windowWidth,windowHeight);
@@ -14,7 +15,6 @@ function setup() {
 }
 
 function draw() {
-    background(0,0,200);
     //e.createEllipse();
     //getPositions();
     getEmotions();
@@ -27,15 +27,16 @@ function draw() {
     }
 
 
-    noStroke();
-    fill(0,150);
+
     //rect(0,0,width,height);
 
     if (emotions) {
         // angry=0, sad=1, surprised=2, happy=3
         for (var i = 0;i < predictedEmotions.length;i++) {
-            rect(i * 250+20, 120, 30, -predictedEmotions[i].value * 30);    
-            text('happyCounter=' + str(happyCounter),60, width/2);
+            noStroke();
+            //fill(0,150);
+            //rect(i * 250+20, 120, 30, -predictedEmotions[i].value * 30);    
+            //text('happyCounter=' + str(happyCounter),60, width/2);
                      
 
             if (predictedEmotions[3].value >= happyTreshold){
@@ -48,7 +49,7 @@ function draw() {
             }
         
             
-        if (localHappyCounter >= 100) { 
+        if (localHappyCounter >= 50) { 
                 localHappyCounter = 0;
                 
                 //console.log('sending "HAPPY"')
