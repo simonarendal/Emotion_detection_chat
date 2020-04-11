@@ -3,15 +3,18 @@ var localHappyCounter = 0;
 var happyTreshold = 0.3;
 //let ellipses = [];
 let e;
+let timer = 0;
+
 
 function setup() {
     loadCamera();
     loadTracker();
     loadCanvas(windowWidth,windowHeight);
-    //e = new Ellipse(random(0,width), random(0, 100), random(100,255), 0, random(100,255));
+
 }
 
 function draw() {
+    background(0,0,200);
     //e.createEllipse();
     //getPositions();
     getEmotions();
@@ -22,6 +25,7 @@ function draw() {
     for(var i =0; i< ellipses.length; i++){
     ellipses[i].createEllipse();
     }
+
 
     noStroke();
     fill(0,150);
