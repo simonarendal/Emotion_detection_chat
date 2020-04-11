@@ -1,5 +1,5 @@
 body, html {
-    background-color: rgb(255, 255, 37);
+    background-color: rgb(255, 255, 255);
     height: 100%;
 }
 
@@ -14,8 +14,8 @@ body, html {
 #subscriber {
     position: absolute;
     right: 10px;
-    width: 360px;
-    height: 240px;
+    width: 90%;
+    height: 90%;
     z-index: 100;
     border: 3px solid white;
     border-radius: 3px;

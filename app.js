@@ -202,7 +202,7 @@ client.on("connect", function (connack) {
 
 // When we get any kind of message, we want to do something
 client.on("message", function (topic, payload) {
-  console.log("received message");
+  //console.log("received message");
 
   // The payload comes in as a Buffer(i.e. incomprehensible bytes), so we need to convert it first
   // This happens by using JSON.parse() after converting the Buffer to a string
@@ -223,11 +223,11 @@ client.on("message", function (topic, payload) {
 
   if (topic === happyTopic) {
     if (convertedPayload.message === "HAPPY") {
-      console.log('received "HAPPY"');
-	  happyCounter++;
+      //console.log('received "HAPPY"');
+	  if (happyCounter < 255){happyCounter ++};
 	  ellipses.push(new Ellipse());
 	 //drawEllipse()
-      console.log("happyCounter: " + happyCounter);
+      //console.log("happyCounter: " + happyCounter);
     }
   }
 });
