@@ -1,4 +1,4 @@
-var happyCounter = 150;
+var happyCounter = 50;
 var localHappyCounter = 0;
 var happyTreshold = 0.2;
 //let ellipses = [];
@@ -19,7 +19,7 @@ function draw() {
     //getPositions();
     getEmotions();
     clear();
-    if(happyCounter  > 0){happyCounter -=0.1;}
+    if(happyCounter  > 0){happyCounter -=0.2;}
     console.log('happyCounter' + str(happyCounter));
     //fill(0,happyCounter,0);
     //rect(0,0,windowWidth,windowHeight);

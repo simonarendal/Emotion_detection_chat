@@ -224,8 +224,8 @@ client.on("message", function (topic, payload) {
   if (topic === happyTopic) {
     if (convertedPayload.message === "HAPPY") {
       //console.log('received "HAPPY"');
-	  if (happyCounter < 255){happyCounter ++};
-	  ellipses.push(new Ellipse());
+	  if (happyCounter <= 255){happyCounter ++};
+	  //ellipses.push(new Ellipse());
 	 //drawEllipse()
       //console.log("happyCounter: " + happyCounter);
     }
