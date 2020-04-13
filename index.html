@@ -10,7 +10,7 @@
     <script src="https://unpkg.com/mqtt/dist/mqtt.min.js" type="text/javascript"></script>
 
 
-    
+
     <script src="./libs/clmtrackr.js"></script>
     <script src="./libs/model_pca_20_svm.js"></script>
     <script src="./libs/p5.js"></script>
@@ -26,16 +26,23 @@
 
 </head>
 <body>
+         
     
+    
+
+    <script src="./emotion_detection/sketch.js"></script>
+
+
+   
+
     <div id="videos">
+        
         <div id="subscriber"></div>
         <div id="publisher"></div>
+        <div id="overlays"></div>
     </div>
 
-    <div id="overlay">
-        <script src="./emotion_detection/sketch.js"></script>
-    </div>
+       <script type="text/javascript" src="app.js"></script>
 
-    <script type="text/javascript" src="app.js"></script>
 </body>
 </html>
