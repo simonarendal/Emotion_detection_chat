@@ -52,6 +52,9 @@ var happyTopic = Topic + "-happy";
 // We use a timer in order to only show the interface after we are fairly certain we have a unique ID
 var connectionTimer = null;
 
+// Since clientIds are random, we also keep a numerical ID which is easier to work with
+var numericId = 1;
+
 // When we connect we want to do something
 client.on("connect", function (connack) {
   console.log("connected");
@@ -59,6 +62,7 @@ client.on("connect", function (connack) {
   // Messages are called payloads in MQTT
   // We create a payload with our unique ID and a textual message
   var payload = {
+    id : numericId,
     clientId: clientOptions.clientId,
     message: "HELLO",
   };
@@ -90,26 +94,61 @@ client.on("message", function (topic, payload) {
 
   // If we got a payload on the connection topic, do this
   if (topic === connectTopic) {
+
+		// If we got a payload from someone else than us, and they have the same ID as us
+    if(convertedPayload.clientId !== clientOptions.clientId && convertedPayload.id === numericId) {
+			// We get this message if someone has already claimed this ID
+			if(convertedPayload.message === 'ID_TAKEN') {
+				// Increase our ID by one
+        numericId++;
+
+        // We say hello again with our new ID
+				var helloPayload = {
+					id : numericId,
+					clientId : clientOptions.clientId,
+					message : 'HELLO'
+				};
+				// We send/publish the payload to the connection topic
+				client.publish(connectTopic, JSON.stringify(helloPayload));
+
+				// Restart the connection timer
+        updateTimer();
+      }
+        
+ 			  // We get this message if someone new comes along, or someone has gotten a new ID
+      else if(convertedPayload.message === 'HELLO') {
+          // Let everyone know that this ID is taken
+          var changePayload = {
+            id : numericId,
+            clientId : clientOptions.clientId,
+            message : 'ID_TAKEN'
+          };
+          // We send/publish the payload to the connection topic
+          client.publish(connectTopic, JSON.stringify(changePayload));
+        }
+
+
+
+    /*
     // If we got a payload from someone else than us, and they have the same ID as us
     if (convertedPayload.clientId !== clientOptions.clientId) {
       // We get this message if someone has already claimed this ID
       if (convertedPayload.message === "HELLO") {
         console.log("other client joined on connectTopic");
-
-       
+  
       }
-    }
+    }*/
+
+
   }
 
   if (topic === happyTopic) {
     if (convertedPayload.message === "HAPPY") {
       //console.log('received "HAPPY"');
 	  if (happyCounter <= 255){happyCounter ++};
-	  //ellipses.push(new Ellipse());
-	 //drawEllipse()
-      //console.log("happyCounter: " + happyCounter);
-    }
+	   }
   }
+}
 });
 
 // Sets a timer that updates the interface, if enough time has passed

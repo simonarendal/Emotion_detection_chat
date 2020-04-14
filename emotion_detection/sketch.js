@@ -60,6 +60,7 @@ function draw() {
 
    function publishFunc () {
     var HappyPayload = {
+        id : numericId,
         clientId : clientOptions.clientId,
         message : 'HAPPY'                     
     };
