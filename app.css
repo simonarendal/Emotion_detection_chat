@@ -13,9 +13,10 @@ body, html {
 
 #subscriber {
     position: absolute;
-    right: 10px;
-    width: 90%;
-    height: 90%;
+    left: 20%;
+    top: 20%;
+    width: 60%;
+    height: 60%;
     z-index: 100;
     border: 3px solid white;
     border-radius: 3px;
