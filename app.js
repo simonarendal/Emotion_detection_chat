@@ -107,12 +107,14 @@ client.on("message", function (topic, payload) {
 					id : numericId,
 					clientId : clientOptions.clientId,
 					message : 'HELLO'
-				};
+        };
+        
+        console.log('amount of id: ' + helloPayload.id);
 				// We send/publish the payload to the connection topic
 				client.publish(connectTopic, JSON.stringify(helloPayload));
 
 				// Restart the connection timer
-        updateTimer();
+        //updateTimer();
       }
         
  			  // We get this message if someone new comes along, or someone has gotten a new ID

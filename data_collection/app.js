@@ -28,6 +28,7 @@
 var localHappyCounter1 = 0;
 var localHappyCounter2 = 0;
 var happyCounter = 0;
+var numbOfParticipants = 0;
 
 var clientOptions = {
     clientId: "mqttjs_" + Math.random().toString(16).substr(2, 8),
@@ -90,9 +91,11 @@ client.on("message", function (topic, payload) {
         if (convertedPayload.message === "HELLO") {
             if(convertedPayload.id === 1){
                 console.log("first participant joined")
+                numbOfParticipants = 1;
             }
-            else if (convertedPayload.id === 2){
+            if (convertedPayload.id === 2){
                 console.log("second participant joined")
+                numbOfParticipants = 2;
             }
         }
       }
@@ -103,13 +106,13 @@ client.on("message", function (topic, payload) {
         if(convertedPayload.id === 1){
             localHappyCounter1 ++;
             happyCounter++;
-            console.log('client 1 is smiling' + 'happyCounter = ' + (happyCounter) + 'localHappyCounter1 = '+(localHappyCounter1));
+           // console.log('client 1 is smiling' + 'happyCounter = ' + (happyCounter) + 'localHappyCounter1 = '+(localHappyCounter1));
             
         }
         else if (convertedPayload.id === 2){
             localHappyCounter2 ++;
             happyCounter++;
-            console.log('client 2 is smiling' + 'happyCounter = ' + (happyCounter) + 'localHappyCounter2 = '+(localHappyCounter2));
+           // console.log('client 2 is smiling' + 'happyCounter = ' + (happyCounter) + 'localHappyCounter2 = '+(localHappyCounter2));
         }
        
       }
