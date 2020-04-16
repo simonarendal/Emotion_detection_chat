@@ -2,6 +2,9 @@ var happyCounter = 50;
 var localHappyCounter = 0;
 var happyTreshold = 0.2;
 
+var happyCounterDecay = -0.2;
+var increase = 5;
+var publishTreshold = 40;
 
 function setup() {
     loadCamera();
@@ -14,13 +17,9 @@ function setup() {
 
 
 function draw() {
-    
-        
-
- 
     getEmotions();
     clear();
-    if(happyCounter  > 0){happyCounter -=0.1;}
+    if(happyCounter  >= 0){happyCounter += happyCounterDecay;}
     console.log('happyCounter' + str(happyCounter));
     background(120,250,70, round(happyCounter))
 
@@ -33,12 +32,12 @@ function draw() {
                      
 
             if (predictedEmotions[3].value >= happyTreshold){
-                localHappyCounter +=5;
+                localHappyCounter +=increase;
                 //console.log('localHappyCounter =' + str(localHappyCounter))
             }
             
             if (predictedEmotions[3].value >= 2*happyTreshold){
-                localHappyCounter +=10;
+                localHappyCounter +=increase*4;
                 //console.log('localHappyCounter =' + str(localHappyCounter))
             }
 
@@ -46,7 +45,7 @@ function draw() {
             }
         
             
-        if (localHappyCounter >= 40) { 
+        if (localHappyCounter >= publishTreshold) { 
                 localHappyCounter = 0;
                 
                 //console.log('sending "HAPPY"')

@@ -113,8 +113,7 @@ client.on("message", function (topic, payload) {
 				// We send/publish the payload to the connection topic
 				client.publish(connectTopic, JSON.stringify(helloPayload));
 
-				// Restart the connection timer
-        //updateTimer();
+
       }
         
  			  // We get this message if someone new comes along, or someone has gotten a new ID
@@ -128,50 +127,19 @@ client.on("message", function (topic, payload) {
           // We send/publish the payload to the connection topic
           client.publish(connectTopic, JSON.stringify(changePayload));
         }
-
-
-
-    /*
-    // If we got a payload from someone else than us, and they have the same ID as us
-    if (convertedPayload.clientId !== clientOptions.clientId) {
-      // We get this message if someone has already claimed this ID
-      if (convertedPayload.message === "HELLO") {
-        console.log("other client joined on connectTopic");
-  
-      }
-    }*/
-
-
+   
+    }
   }
-
   if (topic === happyTopic) {
     if (convertedPayload.message === "HAPPY") {
-      //console.log('received "HAPPY"');
-	  if (happyCounter <= 255){happyCounter ++};
+      console.log('received "HAPPY"');
+	  if (happyCounter <= 255){happyCounter +=1};
 	   }
   }
-}
+
 });
 
-// Sets a timer that updates the interface, if enough time has passed
-// The alternative would be to update the interface every time we are checking out a new ID
 
-function updateTimer() {
-  // If we already set a timer, clear it
-  if (connectionTimer !== null) clearTimeout(connectionTimer);
-  // Update the interface, if we haven't received another ID_TAKEN message within 5000 milliseconds
-  connectionTimer = setTimeout(updateConnectionStatus, 5000);
-}
-
-// Show the current connection status to the page
-function updateConnectionStatus() {
-  // Hide, show and update the appropriate
-  //$('.connecting').hide();
-  //$('.message-container h3 ').show();
-  // By changing the attribute 'data-id' on the HTML body, we can change the styling. See the CSS file for more.
-  //$('body').attr('data-id', numericId);
-  //$('.id-elem').text(numericId);
-}
   ///////////////////////////////////////////////////////////////
  /////////////////////TOKBOX////////////////////////////////////
 ///////////////////////////////////////////////////////////////
