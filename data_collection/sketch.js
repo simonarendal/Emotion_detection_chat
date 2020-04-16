@@ -34,7 +34,7 @@ function startTimer() {
     stroke(0,255,0);
     point(time,350 - localHappyCounter2/10);
     stroke(0,0,255);
-    point(time,350 - happyCounter/10);
+    //point(time,350 - happyCounter/10);
 };
 
 function yAxis() {

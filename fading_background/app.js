@@ -48,6 +48,7 @@ var client = mqtt.connect(MQTTBrokerUrl, clientOptions);
 var Topic = "LesiEmotionChat"; // CHANGE THIS TO SOMETHING UNIQUE TO YOUR PROJECT
 var connectTopic = Topic + "-connect";
 var happyTopic = Topic + "-happy";
+var backgroundTopic = Topic + "-background";
 
 // We use a timer in order to only show the interface after we are fairly certain we have a unique ID
 var connectionTimer = null;
@@ -82,6 +83,15 @@ client.on("connect", function (connack) {
       console.log("connection error");
     }
   });
+
+  client.subscribe(backgroundTopic, function (err) {
+    // If we get an error show it on the console so we can see what went wrong
+    if (err) {
+      console.log("connection error");
+    }
+  });
+
+
 });
 
 // When we get any kind of message, we want to do something
@@ -130,12 +140,22 @@ client.on("message", function (topic, payload) {
    
     }
   }
+  /*
   if (topic === happyTopic) {
     if (convertedPayload.message === "HAPPY") {
       console.log('received "HAPPY"');
 	  if (happyCounter <= 255){happyCounter +=1};
 	   }
   }
+  */
+
+  if (topic === backgroundTopic) {
+    if (convertedPayload.message === "BACKGROUND_CHANGE") {
+      console.log('received');
+      backgroundOpacity = convertedPayload.BO;
+    }
+  }
+
 
 });
 

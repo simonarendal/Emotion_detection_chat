@@ -1,8 +1,8 @@
-var happyCounter = 50;
+var backgroundOpacity = 0;
 var localHappyCounter = 0;
 var happyTreshold = 0.2;
 
-var happyCounterDecay = -0.2;
+
 var increase = 5;
 var publishTreshold = 40;
 
@@ -19,9 +19,11 @@ function setup() {
 function draw() {
     getEmotions();
     clear();
-    if(happyCounter  >= 0){happyCounter += happyCounterDecay;}
-    console.log('happyCounter' + str(happyCounter));
-    background(120,250,70, round(happyCounter))
+    /*
+    if(backgroundOpacity  >= 0){backgroundOpacity += backgroundOpacityDecay;}
+    console.log('happyCounter' + str(backgroundOpacity));
+    */
+    background(120,250,70, round(backgroundOpacity))
 
     
     if (emotions) {
@@ -64,6 +66,6 @@ function draw() {
         message : 'HAPPY'                     
     };
     client.publish(happyTopic, JSON.stringify(HappyPayload));
-    //console.log('message published')
+    console.log('message published')
 
 }    

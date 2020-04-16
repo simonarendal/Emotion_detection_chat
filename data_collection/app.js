@@ -27,8 +27,15 @@
 
 var localHappyCounter1 = 0;
 var localHappyCounter2 = 0;
-var happyCounter = 0;
+//var happyCounter = 0;
 var numbOfParticipants = 0;
+var backgroundOpacity = 0;
+
+
+function setup(){
+  setInterval(publishBackgroundOpacity,100);
+}
+
 
 var clientOptions = {
     clientId: "mqttjs_" + Math.random().toString(16).substr(2, 8),
@@ -51,11 +58,15 @@ var clientOptions = {
   var Topic = "LesiEmotionChat"; // CHANGE THIS TO SOMETHING UNIQUE TO YOUR PROJECT
   var connectTopic = Topic + "-connect";
   var happyTopic = Topic + "-happy";
+  var backgroundTopic = Topic + "-background";
+  
   
   // We use a timer in order to only show the interface after we are fairly certain we have a unique ID
   var connectionTimer = null;
   
-  console.log('happyCounter = ' + (happyCounter));
+
+
+  //console.log('happyCounter = ' + (happyCounter));
   // When we connect we want to do something
   client.on("connect", function (connack) {
     console.log("connected");
@@ -72,6 +83,13 @@ var clientOptions = {
         if (err) {
           console.log("connection error");
         }
+    });
+
+    client.subscribe(backgroundTopic, function (err) {
+      // If we get an error show it on the console so we can see what went wrong
+      if (err) {
+        console.log("connection error");
+      }
     });
 });
 
@@ -105,36 +123,43 @@ client.on("message", function (topic, payload) {
       if (convertedPayload.message === "HAPPY") {
         if(convertedPayload.id === 1){
             localHappyCounter1 ++;
-            happyCounter++;
-           // console.log('client 1 is smiling' + 'happyCounter = ' + (happyCounter) + 'localHappyCounter1 = '+(localHappyCounter1));
+            backgroundOpacity +=2;
+
+           //console.log('client 1 is smiling' +'localHappyCounter1 = '+(localHappyCounter1));
             
         }
-        else if (convertedPayload.id === 2){
+        else if (convertedPayload.id === 2){ //skal det være en else if?
             localHappyCounter2 ++;
-            happyCounter++;
-           // console.log('client 2 is smiling' + 'happyCounter = ' + (happyCounter) + 'localHappyCounter2 = '+(localHappyCounter2));
+            backgroundOpacity +=2;
+           //console.log('client 2 is smiling' + 'localHappyCounter2 = '+(localHappyCounter2));
         }
        
       }
+      //createBackgroundOpacity();
     }
+    
+    backgroundDecay();
+    //publishBackgroundOpacity();
   });
   
-  // Sets a timer that updates the interface, if enough time has passed
-  // The alternative would be to update the interface every time we are checking out a new ID
-  
-  function updateTimer() {
-    // If we already set a timer, clear it
-    if (connectionTimer !== null) clearTimeout(connectionTimer);
-    // Update the interface, if we haven't received another ID_TAKEN message within 5000 milliseconds
-    connectionTimer = setTimeout(updateConnectionStatus, 5000);
-  }
-  
-  // Show the current connection status to the page
-  function updateConnectionStatus() {
-    // Hide, show and update the appropriate
-    //$('.connecting').hide();
-    //$('.message-container h3 ').show();
-    // By changing the attribute 'data-id' on the HTML body, we can change the styling. See the CSS file for more.
-    //$('body').attr('data-id', numericId);
-    //$('.id-elem').text(numericId);
-  }
+/*
+function createBackgroundOpacity(){
+    backgroundOpacity =  (localHappyCounter1 + localHappyCounter2) / 2;
+    
+    //return backgroundOpacity; 
+}*/
+
+function publishBackgroundOpacity () {
+    var BackgrounOpacityPayload = {
+        clientId : clientOptions.clientId,
+        message : 'BACKGROUND_CHANGE',
+        BO: backgroundOpacity,                     
+    };
+    client.publish(backgroundTopic, JSON.stringify(BackgrounOpacityPayload));
+    console.log('background opacity published ' + (backgroundOpacity))
+}    
+
+function backgroundDecay(){
+backgroundOpacity = backgroundOpacity - backgroundOpacity/100*5;
+
+};
