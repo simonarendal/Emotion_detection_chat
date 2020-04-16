@@ -1,33 +1,40 @@
-<html>
+<!DOCTYPE html>
+<html lang="en">
+
 <head>
-    <meta charset="utf-8" />
-    <title> LESI webchat </title>
-    <link href="app.css" rel="stylesheet" type="text/css">
-    <script src="https://static.opentok.com/v2/js/opentok.min.js"></script>
-
-
-    <script src="socket.io-1.4.5.js"></script>
-
-
-    <script src="./libs/clmtrackr.js"></script>
-    <script src="./libs/model_pca_20_svm.js"></script>
-    <script src="./libs/p5.js"></script>
-    <script src="./libs/p5.dom.js"></script>
-    <script src="./libs/emotion_classifier.js"></script>
-    <script src="./libs/emotionmodel.js"></script>
-    <script src="./libs/workshop-utils.js"></script>
-    <script src="./emotion_detection/sketch.js"></script>
-
-
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login</title>
+  <link rel="stylesheet" href="login-page.css">
+  <script defer src="login-page.js"></script>
 </head>
+
 <body>
-
-    <div id="videos">
-        <div id="subscriber"></div>
-        <div id="publisher"></div>
+  <main id="main-holder">
+    <h1 id="login-header">Login</h1>
+    
+    <div id="login-error-msg-holder">
+      <p id="login-error-msg">Invalid Password
     </div>
-
-    <script type="text/javascript" src="app.js"></script>
-
+    
+    <form id="login-form">
+      <div id="disclaimer">
+        <p>Thank you for helping us develop this dating tool !</p>
+        <ul>
+          <li>Remember to press 'OK', when permission is asked to use laptop webcam and microphone</li>
+          <li>This tool only utilize facial expression detection technology during the date, 
+            and data will only be used for the purpose of writing this thesis</li>
+          
+            <li>Appen bruger dit webcam til at prøve at se hvor munter jeres date er. Resultatet vil vi præsentere for dig, og sammenligne med din egen oplevelse i det opfølgende interview       
+          </li>
+          <li>No one (except your date) will be watching you while on this date</li>
+        </ul>
+      </div>
+      <input type="password" name="password" id="password-field" class="login-form-field" placeholder="Password">
+      <input type="submit" value="Login" id="login-form-submit">
+    </form>
+  
+  </main>
 </body>
+
 </html>

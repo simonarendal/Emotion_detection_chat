@@ -83,6 +83,11 @@ Emotion-specific global variables
 
 delete emotionModel['disgusted'];
 delete emotionModel['fear'];
+/////////////////// LESI: We delete the other models aswell, besides from 'happy'
+//delete emotionModel['angry'];
+//delete emotionModel['sad'];
+//delete emotionModel['surprised'];
+//////////////////
 var emotions = new emotionClassifier();
 var predictedEmotions;
 emotions.init(emotionModel);
