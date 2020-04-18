@@ -11,28 +11,23 @@
 
 <body>
   <main id="main-holder">
-    <h1 id="login-header">Login</h1>
-    
-    <div id="login-error-msg-holder">
-      <p id="login-error-msg">Invalid Password
-    </div>
+    <h2 id="login-header">Tak fordi du gider at være med !</h2>
     
     <form id="login-form">
       <div id="disclaimer">
-        <p>Thank you for helping us develop this dating tool !</p>
+        <p>Login med kodeordet <em>green</em>, når du har læst nedenstående</p>
         <ul>
-          <li>Remember to press 'OK', when permission is asked to use laptop webcam and microphone</li>
-          <li>This tool only utilize facial expression detection technology during the date, 
-            and data will only be used for the purpose of writing this thesis</li>
-          
-            <li>Appen bruger dit webcam til at prøve at se hvor munter jeres date er. Resultatet vil vi præsentere for dig, og sammenligne med din egen oplevelse i det opfølgende interview       
-          </li>
-          <li>No one (except your date) will be watching you while on this date</li>
+          <li>Husk at trykke 'OK', når du bliver spurgt om du tillader, at vi gør brug af webcam og mikrofon</li>          
+            <li>Appen bruger dit webcam til at prøve at se, hvordan jeres date går. Resultatet vil vi præsentere for dig, og sammenligne med din egen oplevelse i det opfølgende interview</li>
+          <li>Jeres samtale er fuldstændig privat, da vi hverken ser eller hører på jer, mens i er på date</li>
         </ul>
       </div>
-      <input type="password" name="password" id="password-field" class="login-form-field" placeholder="Password">
+      <input type="password" name="password" id="password-field" class="login-form-field" placeholder="Skriv kodeord her">
       <input type="submit" value="Login" id="login-form-submit">
     </form>
+    <div id="login-error-msg-holder">
+      <p id="login-error-msg">Forkert kodeord </p>
+    </div>
   
   </main>
 </body>

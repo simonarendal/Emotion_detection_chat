@@ -67,5 +67,6 @@ function draw() {
     };
     client.publish(happyTopic, JSON.stringify(HappyPayload));
     console.log('message published')
+    
 
 }    

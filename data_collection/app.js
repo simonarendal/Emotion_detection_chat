@@ -96,7 +96,7 @@ var clientOptions = {
 // When we get any kind of message, we want to do something
 client.on("message", function (topic, payload) {
     //console.log("received message");
-  
+    
     // The payload comes in as a Buffer(i.e. incomprehensible bytes), so we need to convert it first
     // This happens by using JSON.parse() after converting the Buffer to a string
     var convertedPayload = JSON.parse(payload.toString());
@@ -121,16 +121,17 @@ client.on("message", function (topic, payload) {
   
     if (topic === happyTopic) {
       if (convertedPayload.message === "HAPPY") {
+        console.log('these are the id : ' + convertedPayload.id);
         if(convertedPayload.id === 1){
             localHappyCounter1 ++;
-            backgroundOpacity +=2;
-
+            backgroundOpacity +=5;
+            
            //console.log('client 1 is smiling' +'localHappyCounter1 = '+(localHappyCounter1));
             
         }
-        else if (convertedPayload.id === 2){ //skal det være en else if?
+        if (convertedPayload.id === 2){ 
             localHappyCounter2 ++;
-            backgroundOpacity +=2;
+            backgroundOpacity +=5;
            //console.log('client 2 is smiling' + 'localHappyCounter2 = '+(localHappyCounter2));
         }
        
@@ -150,16 +151,16 @@ function createBackgroundOpacity(){
 }*/
 
 function publishBackgroundOpacity () {
-    var BackgrounOpacityPayload = {
+    var BackgroundOpacityPayload = {
         clientId : clientOptions.clientId,
         message : 'BACKGROUND_CHANGE',
         BO: backgroundOpacity,                     
     };
-    client.publish(backgroundTopic, JSON.stringify(BackgrounOpacityPayload));
+    client.publish(backgroundTopic, JSON.stringify(BackgroundOpacityPayload));
     console.log('background opacity published ' + (backgroundOpacity))
 }    
 
 function backgroundDecay(){
-backgroundOpacity = backgroundOpacity - backgroundOpacity/100*5;
+backgroundOpacity = backgroundOpacity - backgroundOpacity/100*2;
 
 };
