@@ -1,0 +1,34 @@
+Data_collection:
+
+- subscribe to happyTopic
+- subscribe to promptTopic
+
+- Prompt function
+    - publishe til promptTopic
+    - sende en collective background
+    - bede om predictedEmotion[3].values
+
+- difference function 
+    - udregne difference mellem de to predictedEmotion[3].values 
+    - bonus: lave en ekstra visualisering der viser hvor "enige" de er 
+
+- Average function
+    - client.on.message: tage predictedEmotion[3].values fra begge clients
+    - udregne et samlet output ud fra begge  predictedEmotion[3].values (localHappyCounters )
+    - map(value, 0, 1, 0, 255)
+    
+
+Fading_background:
+
+- subscribe to promptTopic
+
+- client.on.message: "newBackground" --> update background with newBackground. 
+- publishe til happyTopic  predictedEmotion[3].value 
+    - (nulstille localHappyCounter)
+
+
+
+
+
+
+

@@ -25,15 +25,15 @@
 // We generate a random unique clientId when we start
 // MQTT sends messages to everyone, including ourselves, so this is a way to make sure we recognize our own messages
 
-var localHappyCounter1 = 0;
-var localHappyCounter2 = 0;
+var predictedValue1 = 0;
+var predictedValue2 = 0;
 //var happyCounter = 0;
 var numbOfParticipants = 0;
 var backgroundOpacity = 0;
 
 
 function setup(){
-  setInterval(publishBackgroundOpacity,100);
+  setInterval(sendPrompt,100);
 }
 
 
@@ -58,11 +58,11 @@ var clientOptions = {
   var Topic = "LesiEmotionChat"; // CHANGE THIS TO SOMETHING UNIQUE TO YOUR PROJECT
   var connectTopic = Topic + "-connect";
   var happyTopic = Topic + "-happy";
-  var backgroundTopic = Topic + "-background";
+  var promptTopic = Topic + "-prompt";
   
   
   // We use a timer in order to only show the interface after we are fairly certain we have a unique ID
-  var connectionTimer = null;
+  //var connectionTimer = null;
   
 
 
@@ -85,7 +85,7 @@ var clientOptions = {
         }
     });
 
-    client.subscribe(backgroundTopic, function (err) {
+    client.subscribe(promptTopic, function (err) {
       // If we get an error show it on the console so we can see what went wrong
       if (err) {
         console.log("connection error");
@@ -120,47 +120,42 @@ client.on("message", function (topic, payload) {
     }
   
     if (topic === happyTopic) {
-      if (convertedPayload.message === "HAPPY") {
-        console.log('these are the id : ' + convertedPayload.id);
+      if (convertedPayload.message === "PREDICTEDVALUE") {
+        //console.log('these are the id : ' + convertedPayload.id);
         if(convertedPayload.id === 1){
-            localHappyCounter1 ++;
-            backgroundOpacity +=5;
-            
-           //console.log('client 1 is smiling' +'localHappyCounter1 = '+(localHappyCounter1));
+            predictedValue1 = convertedPayload.predictedValue;
+                        
             
         }
         if (convertedPayload.id === 2){ 
-            localHappyCounter2 ++;
-            backgroundOpacity +=5;
-           //console.log('client 2 is smiling' + 'localHappyCounter2 = '+(localHappyCounter2));
-        }
-       
+          predictedValue2 = convertedPayload.predictedValue;
+           
+        }    
       }
-      //createBackgroundOpacity();
+      averageBackground();
+      difference(); 
     }
-    
-    backgroundDecay();
-    //publishBackgroundOpacity();
   });
   
-/*
-function createBackgroundOpacity(){
-    backgroundOpacity =  (localHappyCounter1 + localHappyCounter2) / 2;
-    
-    //return backgroundOpacity; 
-}*/
 
-function publishBackgroundOpacity () {
-    var BackgroundOpacityPayload = {
+
+function sendPrompt () {
+    var promptPayload = {
         clientId : clientOptions.clientId,
-        message : 'BACKGROUND_CHANGE',
-        BO: backgroundOpacity,                     
+        message : 'PROMPT',
+        BO: backgroundOpacity                     
     };
-    client.publish(backgroundTopic, JSON.stringify(BackgroundOpacityPayload));
+    client.publish(promptTopic, JSON.stringify(promptPayload));
     console.log('background opacity published ' + (backgroundOpacity))
 }    
 
-function backgroundDecay(){
-backgroundOpacity = backgroundOpacity - backgroundOpacity/100*2;
+function averageBackground (){
+  backgroundOpacity = (predictedValue1 + predictedValue2) / 2;
+  }
 
-};
+function difference() {
+  let valueDifference;
+
+  valueDifference = Math.abs(predictedValue1 - predictedValue2);
+  console.log('valueDifference: ' + valueDifference);
+} 

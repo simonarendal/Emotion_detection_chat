@@ -48,10 +48,8 @@ var client = mqtt.connect(MQTTBrokerUrl, clientOptions);
 var Topic = "LesiEmotionChat"; // CHANGE THIS TO SOMETHING UNIQUE TO YOUR PROJECT
 var connectTopic = Topic + "-connect";
 var happyTopic = Topic + "-happy";
-var backgroundTopic = Topic + "-background";
+var promptTopic = Topic + "-prompt";
 
-// We use a timer in order to only show the interface after we are fairly certain we have a unique ID
-var connectionTimer = null;
 
 // Since clientIds are random, we also keep a numerical ID which is easier to work with
 var numericId = 1;
@@ -84,7 +82,7 @@ client.on("connect", function (connack) {
     }
   });
 
-  client.subscribe(backgroundTopic, function (err) {
+  client.subscribe(promptTopic, function (err) {
     // If we get an error show it on the console so we can see what went wrong
     if (err) {
       console.log("connection error");
@@ -109,8 +107,14 @@ client.on("message", function (topic, payload) {
     if(convertedPayload.clientId !== clientOptions.clientId && convertedPayload.id === numericId) {
 			// We get this message if someone has already claimed this ID
 			if(convertedPayload.message === 'ID_TAKEN') {
-				// Increase our ID by one
-        numericId++;
+        // We switch to the other ID
+        if(convertedPayload.id === 1){
+          numericId = 2;
+        }
+        if(convertedPayload.id === 2){
+          numericId = 1;
+        }
+        
 
         // We say hello again with our new ID
 				var helloPayload = {
@@ -140,19 +144,14 @@ client.on("message", function (topic, payload) {
    
     }
   }
-  /*
-  if (topic === happyTopic) {
-    if (convertedPayload.message === "HAPPY") {
-      console.log('received "HAPPY"');
-	  if (happyCounter <= 255){happyCounter +=1};
-	   }
-  }
-  */
+ 
 
-  if (topic === backgroundTopic) {
-    if (convertedPayload.message === "BACKGROUND_CHANGE") {
-      console.log('received');
+  if (topic === promptTopic) {
+    if (convertedPayload.message === "PROMPT") {
+      console.log('prompt received');
       backgroundOpacity = convertedPayload.BO;
+      console.log('BO = ' + (convertedPayload.BO));
+      publishPredictedValue();
     }
   }
 
@@ -233,3 +232,13 @@ function initializeSession() {
     }
   });
 }
+
+function publishPredictedValue(){
+  var HappyPayload = {
+    id : numericId,
+    clientId : clientOptions.clientId,
+    message : 'PREDICTEDVALUE',
+    predictedValue : predictedHappy                         
+};
+client.publish(happyTopic, JSON.stringify(HappyPayload));
+}   
