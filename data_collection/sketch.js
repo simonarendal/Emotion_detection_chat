@@ -10,6 +10,9 @@ xAxis();
 }
 
 function draw() {
+
+    averageBackground();
+    difference(); 
     
     noStroke();
     fill(0,0,0);

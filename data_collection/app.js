@@ -25,21 +25,22 @@
 // We generate a random unique clientId when we start
 // MQTT sends messages to everyone, including ourselves, so this is a way to make sure we recognize our own messages
 
-var predictedValue1 = 0;
-var predictedValue2 = 0;
+var localHappyCounter1 = 0;
+var localHappyCounter2 = 0;
 //var happyCounter = 0;
 var numbOfParticipants = 0;
 var backgroundOpacity = 0;
 
 
 function setup(){
-  setInterval(sendPrompt,100);
+  setInterval(sendPrompt,500);
 }
 
 
 var clientOptions = {
     clientId: "mqttjs_" + Math.random().toString(16).substr(2, 8),
   };
+  
   
   // Uncomment one of the three following lines to choose your broker
   // var MQTTBrokerUrl = 'ws://iot.eclipse.org:80/ws';
@@ -120,20 +121,20 @@ client.on("message", function (topic, payload) {
     }
   
     if (topic === happyTopic) {
-      if (convertedPayload.message === "PREDICTEDVALUE") {
-        //console.log('these are the id : ' + convertedPayload.id);
+      if (convertedPayload.message === "LOCALHAPPYCOUNTER") {
+        console.log('these are the id : ' + convertedPayload.id);
         if(convertedPayload.id === 1){
-            predictedValue1 = convertedPayload.predictedValue;
-                        
+          console.log('localHappyCounter1 = ' + (convertedPayload.localHappyCounter))
+          localHappyCounter1 = convertedPayload.localHappyCounter;
+              
             
         }
-        if (convertedPayload.id === 2){ 
-          predictedValue2 = convertedPayload.predictedValue;
-           
+        if (convertedPayload.id === 2){
+          console.log('localHappyCounter2 = ' + (convertedPayload.localHappyCounter))
+          localHappyCounter2 = convertedPayload.localHappyCounter;
         }    
       }
-      averageBackground();
-      difference(); 
+
     }
   });
   
@@ -150,12 +151,13 @@ function sendPrompt () {
 }    
 
 function averageBackground (){
-  backgroundOpacity = (predictedValue1 + predictedValue2) / 2;
+  backgroundOpacity = (localHappyCounter1 + localHappyCounter2) / 2;
+  //console.log('average background: ' + backgroundOpacity);
   }
 
 function difference() {
   let valueDifference;
 
-  valueDifference = Math.abs(predictedValue1 - predictedValue2);
-  console.log('valueDifference: ' + valueDifference);
+  valueDifference = Math.abs(localHappyCounter1 - localHappyCounter2);
+  //console.log('valueDifference: ' + valueDifference);
 } 

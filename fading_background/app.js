@@ -151,7 +151,8 @@ client.on("message", function (topic, payload) {
       console.log('prompt received');
       backgroundOpacity = convertedPayload.BO;
       console.log('BO = ' + (convertedPayload.BO));
-      publishPredictedValue();
+      publishLocalHappyCounter();
+     
     }
   }
 
@@ -233,12 +234,14 @@ function initializeSession() {
   });
 }
 
-function publishPredictedValue(){
+function publishLocalHappyCounter(){
   var HappyPayload = {
     id : numericId,
     clientId : clientOptions.clientId,
-    message : 'PREDICTEDVALUE',
-    predictedValue : predictedHappy                         
+    message : 'LOCALHAPPYCOUNTER',
+    localHappyCounter : localHappyCounter                       
 };
 client.publish(happyTopic, JSON.stringify(HappyPayload));
+console.log('localHappyCounter published: ' + (localHappyCounter));
+localHappyCounter = 0; 
 }   
