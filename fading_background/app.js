@@ -189,9 +189,17 @@ fetch(SERVER_BASE_URL + "/session")
     apiKey = res.apiKey;
     sessionId = res.sessionId;
     token = res.token;
-    initializeSession();
+    //initializeSession();
   })
   .catch(handleError);
+
+
+  Promise.all([
+    faceapi.nets.tinyFaceDetector.loadFromUri('./models'), 
+    faceapi.nets.faceLandmark68Net.loadFromUri('./models'),
+    faceapi.nets.faceExpressionNet.loadFromUri('./models')
+  ]).then(initializeSession()) //when models are loaded --> start video
+  
 
 // We initialize a session with our tokbox api key, and the session Id created by the heroku-app
 function initializeSession() {
