@@ -123,7 +123,7 @@ client.on("message", function (topic, payload) {
 					message : 'HELLO'
         };
         
-        console.log('amount of id: ' + helloPayload.id);
+        console.log('MY ID: ' + helloPayload.id);
 				// We send/publish the payload to the connection topic
 				client.publish(connectTopic, JSON.stringify(helloPayload));
 
@@ -171,6 +171,9 @@ var sessionId =
 var token =
   "T1==cGFydG5lcl9pZD00NjY1MTI0MiZzaWc9NWE3YmQxNTg4MTkxZGY1YTNjNmMxMDE3MWQyMTY1NGQ2ZmEzNDQ4YTpzZXNzaW9uX2lkPTJfTVg0ME5qWTFNVEkwTW41LU1UVTROakUyTlRnM05USTJNSDVTYUhSNGFtZ3ZObFJKU0hWeU56RldZWEV3ZVRoMmVXTi1mZyZjcmVhdGVfdGltZT0xNTg2MTY3MzM5Jm5vbmNlPTAuOTQ0MjQ1OTcxNTk0NTU3JnJvbGU9c3Vic2NyaWJlciZleHBpcmVfdGltZT0xNTg2MTcwOTM4JmluaXRpYWxfbGF5b3V0X2NsYXNzX2xpc3Q9";
 
+
+var subsriberTest;
+  
 // Handling all of our errors here by alerting them
 function handleError(error) {
   if (error) {
@@ -189,25 +192,57 @@ fetch(SERVER_BASE_URL + "/session")
     apiKey = res.apiKey;
     sessionId = res.sessionId;
     token = res.token;
-    //initializeSession();
+    initializeSession();
   })
   .catch(handleError);
 
-
+/*
   Promise.all([
     faceapi.nets.tinyFaceDetector.loadFromUri('./models'), 
     faceapi.nets.faceLandmark68Net.loadFromUri('./models'),
     faceapi.nets.faceExpressionNet.loadFromUri('./models')
   ]).then(initializeSession()) //when models are loaded --> start video
   
-
+*/
 // We initialize a session with our tokbox api key, and the session Id created by the heroku-app
 function initializeSession() {
   var session = OT.initSession(apiKey, sessionId);
 
   // We want clients to be able to subscribe to (or view) each other's streams in the session.
   // Subscribe to a newly created stream
-  session.on("streamCreated", function (event) {
+
+
+// Subscribe to a newly created stream
+session.on('streamCreated', function(event) {
+  var subscriberOptions = {
+    insertDefaultUI: false,
+    insertMode: 'append',
+    width: '100%',
+    height: '100%'
+  };
+  var subscriber = session.subscribe(event.stream, subscriberOptions, function(error) {
+
+    
+    if (error) {
+      console.log('There was an error publishing: ', error.name, error.message);
+    }
+  });
+
+  subscriber.on('videoElementCreated', function(event) {
+    document.getElementById('subscriber').appendChild(event.element);
+    //console.log('subscriber element: ' + event.element);
+    //subsriberTest = event.element;
+    //console.log('subscriber element: ' + subscriberTest);
+
+    });
+});
+
+
+
+
+
+/*
+  session.on("streamCreated", function(event) {
     session.subscribe(
       event.stream,
       "subscriber",
@@ -216,11 +251,14 @@ function initializeSession() {
         width: "100%",
         height: "100%",
       },
-      handleError
-    );
-  });
-
+      //handleError
+    //);
+   
+  //});
+*/
+ 
   // Create a publisher so the clients send/publish their webcam stream
+  /*
   var publisher = OT.initPublisher(
     "publisher",
     {
@@ -230,6 +268,11 @@ function initializeSession() {
     },
     handleError
   );
+*/
+  var publisher = OT.initPublisher({insertDefaultUI: false});
+  publisher.on('videoElementCreated', function(event) {
+  document.getElementById('publisher').appendChild(event.element);
+});
 
   // Connect to the session
   session.connect(token, function (error) {
@@ -241,6 +284,9 @@ function initializeSession() {
     }
   });
 }
+
+
+///////////////////////////////////////////////////////////////////////
 
 function publishLocalHappyCounter(){
   var HappyPayload = {
