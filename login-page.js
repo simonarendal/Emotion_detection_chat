@@ -15,7 +15,7 @@ loginButton.addEventListener("click", (e) => {
     if (password === roomName) {
         // If the credentials are valid, show an alert box and reload the page
         alert("I agree to the terms");
-        location.replace("https://itu.dk/people/siaj/" + roomName)
+        location.replace("https://leonorabryndum.dk/tokbox/" + roomName)  
     } else {
         // Otherwise, make the login error message show (change its oppacity)
         loginErrorMsg.style.opacity = 1;
