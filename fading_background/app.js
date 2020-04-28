@@ -173,6 +173,7 @@ var token =
 
 
 var subsriberTest;
+var publisherTest;
   
 // Handling all of our errors here by alerting them
 function handleError(error) {
@@ -210,39 +211,7 @@ function initializeSession() {
 
   // We want clients to be able to subscribe to (or view) each other's streams in the session.
   // Subscribe to a newly created stream
-
-
-// Subscribe to a newly created stream
-session.on('streamCreated', function(event) {
-  var subscriberOptions = {
-    insertDefaultUI: false,
-    insertMode: 'append',
-    width: '100%',
-    height: '100%'
-  };
-  var subscriber = session.subscribe(event.stream, subscriberOptions, function(error) {
-
-    
-    if (error) {
-      console.log('There was an error publishing: ', error.name, error.message);
-    }
-  });
-
-  subscriber.on('videoElementCreated', function(event) {
-    document.getElementById('subscriber').appendChild(event.element);
-    //console.log('subscriber element: ' + event.element);
-    //subsriberTest = event.element;
-    //console.log('subscriber element: ' + subscriberTest);
-
-    });
-});
-
-
-
-
-
-/*
-  session.on("streamCreated", function(event) {
+  session.on("streamCreated", function (event) {
     session.subscribe(
       event.stream,
       "subscriber",
@@ -251,14 +220,11 @@ session.on('streamCreated', function(event) {
         width: "100%",
         height: "100%",
       },
-      //handleError
-    //);
-   
-  //});
-*/
- 
+      handleError
+    );
+  });
+
   // Create a publisher so the clients send/publish their webcam stream
-  /*
   var publisher = OT.initPublisher(
     "publisher",
     {
@@ -268,11 +234,6 @@ session.on('streamCreated', function(event) {
     },
     handleError
   );
-*/
-  var publisher = OT.initPublisher({insertDefaultUI: false});
-  publisher.on('videoElementCreated', function(event) {
-  document.getElementById('publisher').appendChild(event.element);
-});
 
   // Connect to the session
   session.connect(token, function (error) {
@@ -289,13 +250,20 @@ session.on('streamCreated', function(event) {
 ///////////////////////////////////////////////////////////////////////
 
 function publishLocalHappyCounter(){
+console.log('this is localHappyCounter: ' + localHappyCounter);
+console.log('this is timesrun: ' + timesRun);
+
+  var publishedLocalHappyCounter = localHappyCounter/timesRun;
   var HappyPayload = {
     id : numericId,
     clientId : clientOptions.clientId,
     message : 'LOCALHAPPYCOUNTER',
-    localHappyCounter : localHappyCounter                       
+    localHappyCounter : publishedLocalHappyCounter                      
 };
 client.publish(happyTopic, JSON.stringify(HappyPayload));
-console.log('localHappyCounter published: ' + (localHappyCounter));
+//console.log('localHappyCounter published: ' + (publishedLocalHappyCounter) + 'timesRun = ' + (timesRun));
 localHappyCounter = 0; 
+timesRun = 0;
+
 }   
+

@@ -1,8 +1,10 @@
-const video = document.getElementById('myVideo');
+//import {subscriberTest, publisherTest} from './test';
+
+//const video = document.getElementById('publisher').children[0];
 //const video = subsriberTest;
 //const video = 'subscriber'
-var happyTreshold = 0.5;
-var localHappyCounter = 0;
+//var happyTreshold = 0.5;
+//var localHappyCounter = 0;
 
 //loading all the needed models
 Promise.all([
@@ -23,13 +25,14 @@ function startVideo() {
 */
 
 function startVideo() {
-  var video2 = document.getElementById('publisher').children[0];
-  console.log('video2: ' + video2);
+//console.log('inside script_subscriber: ' + subscriberTest);
+//console.log('inside script_publisher: ' + publisherTest);
+
 
 console.log('starting video');
 console.log('this is video:' + video);
 //console.log('this is video:' + subsriberTest);
-video.on('play', function (event) { // when video starts playing
+video.on('playing', function (event) { // when video starts playing
   const canvas = faceapi.createCanvasFromMedia(video)
   document.body.append(canvas)
   const displaySize = { width: video.width, height: video.height }

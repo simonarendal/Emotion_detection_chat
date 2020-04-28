@@ -30,10 +30,11 @@ var localHappyCounter2 = 0;
 //var happyCounter = 0;
 var numbOfParticipants = 0;
 var backgroundOpacity = 0;
+var averageHappyCounters;
 
 
 function setup(){
-  setInterval(sendPrompt,500);
+  setInterval(sendPrompt,2000);
 }
 
 
@@ -140,18 +141,54 @@ client.on("message", function (topic, payload) {
   
 
 
+//this function will return a float. 
+//arguments needed is value of mouseX, and the two ranges' max and min
+function myMap(var1, min1, max1, min2, max2 )
+{
+  var range1 = (max1-min1); //defines range of range1
+  var range2 = (max2-min2); // defines range of range2
+  var convertNum = (var1/range1); //dividing current value of mouseX with range1. 
+  //procentage calculation. How much is one procent..
+
+
+  //multiplying the result from above to scale the value to new range
+  var var2 = (convertNum * range2); 
+  // Procent regning: ganger det med 100 for at få det i procent. Her ganes med nye range for at skalere den til denne range
+
+  //return var2 
+  return var2;
+}
+
+
+
+
 function sendPrompt () {
     var promptPayload = {
         clientId : clientOptions.clientId,
         message : 'PROMPT',
         BO: backgroundOpacity                     
     };
+    //console.log('background opacity published ' + (backgroundOpacity))
+
     client.publish(promptTopic, JSON.stringify(promptPayload));
-    console.log('background opacity published ' + (backgroundOpacity))
 }    
 
 function averageBackground (){
-  backgroundOpacity = (localHappyCounter1 + localHappyCounter2) / 2;
+   averageHappyCounters = (localHappyCounter1 + localHappyCounter2) / 2;
+   console.log('averageHappyCounters: ' + averageHappyCounters);
+   console.log('localHappyCounters: ' + (localHappyCounter1) + (localHappyCounter2));
+
+
+   backgroundOpacity = round(myMap(averageHappyCounters, 0, 1, 0, 255));
+
+   console.log('background opacity ' + (backgroundOpacity))
+
+   //backgroundOpacity = map_range();
+
+
+   /*function map_range(averageHappyCounters, 0, 1, 0, 255) {
+    return 0 + (255 - 0) * (averageHappyCounters - 0) / (1 - 0);
+}*/
   //console.log('average background: ' + backgroundOpacity);
   }
 

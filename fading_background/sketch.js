@@ -1,42 +1,101 @@
+const video = document.getElementById('video');
+
 var backgroundOpacity = 0;
-var predictedHappy = 0;
 var localHappyCounter = 0;
-var happyTreshold = 0.3;
+var happyTreshold = 0.2;
+var timesRun = 0;
+var chaseBackgroundOpacity = 0;
+var chaseSpeed = 4;
+var readFace = false;
+
+//loading all the needed models
+Promise.all([
+    faceapi.nets.tinyFaceDetector.loadFromUri('./models'), 
+    faceapi.nets.faceLandmark68Net.loadFromUri('./models'),
+    faceapi.nets.faceExpressionNet.loadFromUri('./models')
+  ]).then(startVideo) //when models are loaded --> start video
 
 function setup() {
     loadCamera();
-    loadTracker();
+    //loadTracker();
     loadCanvas(windowWidth,windowHeight);
-    videoInput.hide();
 }
 
 function draw() {
-    getEmotions();
-    clear();
-    background(120,250,70,backgroundOpacity);
+    background(0,0,0);
+    background(120,250,70, chaseBackgroundOpacity);  
+    console.log ('backgroundOpacity = ' + (backgroundOpacity))
+    chase();
+    //fill(120,250,70,chaseBackgroundOpacity);
+   // rect(500,0,200,200);     
     
-    if (emotions) {
-        // angry=0, sad=1, surprised=2, happy=3
-        for (var i = 0;i < predictedEmotions.length;i++) {
-            //console.log('predicting emotions');
-            //rect(i * 250+20, 120, 30, -predictedEmotions[i].value * 30);    
-             if (predictedEmotions[3].value > happyTreshold && localHappyCounter < 255) {
-                 localHappyCounter ++; 
-             }        
-/*
-             if (predictedEmotions[3].value > happyTreshold*2 && localHappyCounter < 255) {
-                localHappyCounter =+ 2; 
-            }  
+   
+  /////// DEBUG UI ///////////
+  fill(255,255,255);
 
-            if (predictedEmotions[3].value > happyTreshold*3 && localHappyCounter < 255) {
-                localHappyCounter =+ 3; 
-            }  
-*/            
-            //predictedHappy = predictedEmotions[3].value;
-            //console.log('predictedEmotions[3] = ' + (predictedEmotions[3].value) )
-            }     
-               
-        }                 
+  textSize(32);
+ 
+  text('face reading: ' + (readFace),100,100);
+  /// som om koden ikke kommer længere end hertil..hmm
+  //round(n, [decimals])
+  console.log('this is happy: ' + happy);
+  var happy = localHappyCounter/timesRun;
+  var happyText =parseFloat(happy).toFixed(2); ;
+  text('Happy: ' + happyText,100,150); //detections er ikke defineret heroppe    ahh okay
+  text('BO: ' + (backgroundOpacity),100,200); 
+  text('Chase:' + (chaseBackgroundOpacity),100,250);
+
            
 }
+
+function chase(){
+    if(chaseBackgroundOpacity < backgroundOpacity){
+        chaseBackgroundOpacity += chaseSpeed;
+    } 
+    else if (chaseBackgroundOpacity > backgroundOpacity){
+        chaseBackgroundOpacity -= 2*chaseSpeed;
+    }
+    console.log('chaseBackgroundOpacity = ' + (chaseBackgroundOpacity))
+
+}
+
+
+function startVideo() {
+    navigator.getUserMedia(
+      { video: {} },
+      stream => video.srcObject = stream,
+      err => console.error(err)
+    )
+
+  }
+  
+  video.addEventListener('play', () => {
+   // const canvas = faceapi.createCanvasFromMedia(video)
+    //document.body.append(canvas)
+    //const displaySize = { width: video.width, height: video.height }
+    //faceapi.matchDimensions(canvas, displaySize)
+    setInterval(async () => {
+      try{
+      const detections = await faceapi.detectAllFaces(video, new faceapi.TinyFaceDetectorOptions()).withFaceLandmarks().withFaceExpressions()
+      localHappyCounter += detections[0].expressions.happy;
+      timesRun ++;
+      readFace = true;
+    }
+      //const resizedDetections = faceapi.resizeResults(detections, displaySize)
+      //canvas.getContext('2d').clearRect(0, 0, canvas.width, canvas.height)
+      //faceapi.draw.drawDetections(canvas, resizedDetections)
+      //faceapi.draw.drawFaceLandmarks(canvas, resizedDetections)
+      //faceapi.draw.drawFaceExpressions(canvas, resizedDetections)
+    
+ 
+      catch (err){
+        //console.log(err);
+      readFace = false;
+      }
+
+    //}
+      //console.log('localHappyCounter = ' + (localHappyCounter))
+
+    }, 100)
+  })
 
