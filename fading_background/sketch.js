@@ -36,12 +36,11 @@ function draw() {
   textSize(32);
  
   text('face reading: ' + (readFace),100,100);
-  /// som om koden ikke kommer længere end hertil..hmm
-  //round(n, [decimals])
+
   console.log('this is happy: ' + happy);
   var happy = localHappyCounter/timesRun;
   var happyText =parseFloat(happy).toFixed(2); ;
-  text('Happy: ' + happyText,100,150); //detections er ikke defineret heroppe    ahh okay
+  text('Happy: ' + happyText,100,150); 
   text('BO: ' + (backgroundOpacity),100,200); 
   text('Chase:' + (chaseBackgroundOpacity),100,250);
 
