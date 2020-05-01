@@ -171,9 +171,6 @@ var sessionId =
 var token =
   "T1==cGFydG5lcl9pZD00NjY1MTI0MiZzaWc9NWE3YmQxNTg4MTkxZGY1YTNjNmMxMDE3MWQyMTY1NGQ2ZmEzNDQ4YTpzZXNzaW9uX2lkPTJfTVg0ME5qWTFNVEkwTW41LU1UVTROakUyTlRnM05USTJNSDVTYUhSNGFtZ3ZObFJKU0hWeU56RldZWEV3ZVRoMmVXTi1mZyZjcmVhdGVfdGltZT0xNTg2MTY3MzM5Jm5vbmNlPTAuOTQ0MjQ1OTcxNTk0NTU3JnJvbGU9c3Vic2NyaWJlciZleHBpcmVfdGltZT0xNTg2MTcwOTM4JmluaXRpYWxfbGF5b3V0X2NsYXNzX2xpc3Q9";
 
-
-var subsriberTest;
-var publisherTest;
   
 // Handling all of our errors here by alerting them
 function handleError(error) {
@@ -261,7 +258,7 @@ console.log('this is timesrun: ' + timesRun);
     localHappyCounter : publishedLocalHappyCounter                      
 };
 client.publish(happyTopic, JSON.stringify(HappyPayload));
-//console.log('localHappyCounter published: ' + (publishedLocalHappyCounter) + 'timesRun = ' + (timesRun));
+console.log('localHappyCounter published: ' + (publishedLocalHappyCounter) + 'timesRun = ' + (timesRun));
 localHappyCounter = 0; 
 timesRun = 0;
 

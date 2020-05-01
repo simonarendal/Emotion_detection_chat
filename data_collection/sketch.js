@@ -1,50 +1,56 @@
-var time = 25;
+var yValue1 = 0;
+var yValue2 = 0;
+var yValueAverage = 0;
 
 function setup(){
 createCanvas(windowWidth, windowHeight);
 background(0,0,0);
-//frameRate(1);
-setInterval(startTimer,3000);
-yAxis();
-xAxis();
+setInterval(sendPrompt,2000);
+setInterval(startTimer,2000);
 }
 
 function draw() {
-    
+    background(0,0,0);
+    var n1 = yValue1.toFixed(2);
+    var n2 = yValue2.toFixed(2);
+
+if (no1 === false) {
+    stroke(255,0,0);
+    strokeWeight(10);
+    point(310, 20);
+}
+
+if (no2 === false) {
+    stroke(255,0,0);
+    strokeWeight(10);
+    point(310, 70);
+}
+
     noStroke();
     fill(0,0,0);
     textSize(32);
-    rect(265,0,50,40);
     fill(255,255,255);
-    text('PARTICIPANTS: ' + str(numbOfParticipants), 30,30);
-    noStroke();
-    fill(0,0,0);
-    //startTimer();
-    
-    //delayTime(1000);
+    text('PARTICIPANT1: ', 30,30);
+    text('PARTICIPANT2: ', 30,80);
+
+    textSize(20);
+    text('participant 1: ' + str(n1), 100, 450);
+    rect(100,400,40,-yValue1);
+
+    text('participant 2: ' + str(n2), 300, 450);
+    rect(300,400,40,-yValue2);
 }
 
 function startTimer() {
-    console.log('started timer');
+//console.log('timer started');
+    yValue1 = map(localHappyCounter1, 0,1,0,80);
 
-    time +=3;
-    strokeWeight(4);
-    stroke(255,0,0);
-    point(time,350 - localHappyCounter1/10);
-    stroke(0,255,0);
-    point(time,350 - localHappyCounter2/10);
-    stroke(0,0,255);
-    //point(time,350 - happyCounter/10);
-};
+    yValue2 = map(localHappyCounter2, 0,1,0,80);
 
-function yAxis() {
-    strokeWeight(2);
-    stroke(200,50);
-    line(windowWidth-25, 350, windowWidth-25, 30);
+    yValueAverage = map(averageHappyCounters, 0,1,0,80);
+    
+    console.log('localHappyCounter1: ' + (localHappyCounter1)+':' + ' localHappyCounter2: ' + (localHappyCounter2)+':' + ' averageHappyCounters: ' + (averageHappyCounters)+':' );
+
 }
 
-function xAxis() {
-    strokeWeight(2);
-    stroke(200,50);
-    line(25, 350, windowWidth-27, 350);
-}
+

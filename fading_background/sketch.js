@@ -1,6 +1,6 @@
 const video = document.getElementById('video');
 
-var backgroundOpacity = 0;
+var backgroundOpacity = 30;
 var localHappyCounter = 0;
 var happyTreshold = 0.2;
 var timesRun = 0;
@@ -28,19 +28,22 @@ function draw() {
     chase();
     //fill(120,250,70,chaseBackgroundOpacity);
    // rect(500,0,200,200);     
-    
-   
+   textSize(18);
+
+     
+  if(readFace === false){
+    fill(255,0,0);
+    text('Cannot read face!',25,25);
+  }
+  
   /////// DEBUG UI ///////////
   fill(255,255,255);
-
-  textSize(32);
- 
   text('face reading: ' + (readFace),100,100);
-
+ 
   console.log('this is happy: ' + happy);
   var happy = localHappyCounter/timesRun;
   var happyText =parseFloat(happy).toFixed(2); ;
-  text('Happy: ' + happyText,100,150); 
+  text('Happy: ' + happyText,100,150); //detections er ikke defineret heroppe    ahh okay
   text('BO: ' + (backgroundOpacity),100,200); 
   text('Chase:' + (chaseBackgroundOpacity),100,250);
 
