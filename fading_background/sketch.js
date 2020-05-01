@@ -36,6 +36,7 @@ function draw() {
     text('Cannot read face!',25,25);
   }
   
+  /*
   /////// DEBUG UI ///////////
   fill(255,255,255);
   text('face reading: ' + (readFace),100,100);
@@ -46,7 +47,7 @@ function draw() {
   text('Happy: ' + happyText,100,150); //detections er ikke defineret heroppe    ahh okay
   text('BO: ' + (backgroundOpacity),100,200); 
   text('Chase:' + (chaseBackgroundOpacity),100,250);
-
+*/
            
 }
 
