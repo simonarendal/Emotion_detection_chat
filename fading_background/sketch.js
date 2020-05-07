@@ -24,7 +24,6 @@ function setup() {
 function draw() {
     background(0,0,0);
     background(120,250,70, chaseBackgroundOpacity);  
-    console.log ('backgroundOpacity = ' + (backgroundOpacity))
     chase();
     //fill(120,250,70,chaseBackgroundOpacity);
    // rect(500,0,200,200);     
@@ -58,19 +57,20 @@ function chase(){
     else if (chaseBackgroundOpacity > backgroundOpacity){
         chaseBackgroundOpacity -= 2*chaseSpeed;
     }
-    console.log('chaseBackgroundOpacity = ' + (chaseBackgroundOpacity))
 
 }
 
-
 function startVideo() {
-    navigator.getUserMedia(
-      { video: {} },
-      stream => video.srcObject = stream,
-      err => console.error(err)
-    )
-
-  }
+if (navigator.mediaDevices.getUserMedia) {
+  navigator.mediaDevices.getUserMedia({ video: true })
+    .then(function (stream) {
+      video.srcObject = stream;
+    })
+    .catch(function (err0r) {
+      console.log("Something went wrong with video feed!");
+    });
+}
+}
   
   video.addEventListener('play', () => {
    // const canvas = faceapi.createCanvasFromMedia(video)
@@ -92,12 +92,9 @@ function startVideo() {
     
  
       catch (err){
-        //console.log(err);
+      console.log(err);
       readFace = false;
       }
-
-    //}
-      //console.log('localHappyCounter = ' + (localHappyCounter))
 
     }, 100)
   })
