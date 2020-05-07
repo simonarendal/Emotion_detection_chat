@@ -148,9 +148,9 @@ client.on("message", function (topic, payload) {
 
   if (topic === promptTopic) {
     if (convertedPayload.message === "PROMPT") {
-      console.log('prompt received');
+      //console.log('prompt received');
       backgroundOpacity = convertedPayload.BO;
-      console.log('BO = ' + (convertedPayload.BO));
+      //console.log('BO = ' + (convertedPayload.BO));
       publishLocalHappyCounter();
      
     }
@@ -247,8 +247,8 @@ function initializeSession() {
 ///////////////////////////////////////////////////////////////////////
 
 function publishLocalHappyCounter(){
-console.log('this is localHappyCounter: ' + localHappyCounter);
-console.log('this is timesrun: ' + timesRun);
+//console.log('this is localHappyCounter: ' + localHappyCounter);
+//console.log('this is timesrun: ' + timesRun);
 
   var publishedLocalHappyCounter = localHappyCounter/timesRun;
   var HappyPayload = {
@@ -258,7 +258,7 @@ console.log('this is timesrun: ' + timesRun);
     localHappyCounter : publishedLocalHappyCounter                      
 };
 client.publish(happyTopic, JSON.stringify(HappyPayload));
-console.log('localHappyCounter published: ' + (publishedLocalHappyCounter) + 'timesRun = ' + (timesRun));
+//console.log('localHappyCounter published: ' + (publishedLocalHappyCounter) + 'timesRun = ' + (timesRun));
 localHappyCounter = 0; 
 timesRun = 0;
 
