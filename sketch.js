@@ -1,11 +1,27 @@
+const loginForm = document.getElementById("login-form");
+const loginButton = document.getElementById("login-form-submit");
+const loginErrorMsg = document.getElementById("login-error-msg");
 const video = document.getElementById('video');
 var expression;
-//loading all the needed models
+
+var roomName = 'green';
 Promise.all([
-    faceapi.nets.tinyFaceDetector.loadFromUri('./fading_background/models'), 
-    faceapi.nets.faceLandmark68Net.loadFromUri('./fading_background/models'),
-    faceapi.nets.faceExpressionNet.loadFromUri('./fading_background/models')
-  ]).then(startVideo) //when models are loaded --> start video
+  faceapi.nets.tinyFaceDetector.loadFromUri('./fading_background/models'),
+  faceapi.nets.faceLandmark68Net.loadFromUri('./fading_background/models'),
+  faceapi.nets.faceExpressionNet.loadFromUri('./fading_background/models')
+]).then(startVideo)
+
+function startVideo() {
+if (navigator.mediaDevices.getUserMedia) {
+  navigator.mediaDevices.getUserMedia({ video: true })
+    .then(function (stream) {
+      video.srcObject = stream;
+    })
+    .catch(function (err0r) {
+      console.log("Something went wrong!");
+    });
+}
+}
 
 function setup() {
     canvas = createCanvas(windowWidth, windowHeight);
@@ -31,7 +47,7 @@ text('Jeres samtale er fuldstændig privat, da vi hverken ser eller hører på j
 }
 
 
-
+/*
 function startVideo() {
     navigator.getUserMedia(
       { video: {} },
@@ -40,7 +56,7 @@ function startVideo() {
     )
 
   }
-  
+  */
   video.addEventListener('play', () => {
    // const canvas = faceapi.createCanvasFromMedia(video)
     //document.body.append(canvas)
@@ -61,3 +77,20 @@ function startVideo() {
     }, 100)
   })
 
+// When the login button is clicked, the following code is executed
+loginButton.addEventListener("click", (e) => {
+  // Prevent the default submission of the form
+  e.preventDefault();
+  // Get the values input by the user in the form fields
+  //const username = loginForm.username.value;
+  const password = loginForm.password.value;
+
+  if (password === roomName) {
+      // If the credentials are valid, show an alert box and reload the page
+      alert("I agree to the terms");
+      location.replace("https://leonorabryndum.dk/tokbox/" + roomName)  
+  } else {
+      // Otherwise, make the login error message show (change its oppacity)
+      loginErrorMsg.style.opacity = 1;
+  }
+})
