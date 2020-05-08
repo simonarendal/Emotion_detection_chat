@@ -6,9 +6,9 @@ var happyTreshold = 0.2;
 var timesRun = 0;
 var chaseBackgroundOpacity = 0;
 var chaseSpeed = 4;
-var readFace = false;
+var readFace = true;
 
-//loading all the needed models
+//LOADING ALL THE NEEDED MODELS FROM MODEL FOLDER INSIDE GREEN FOLDER
 Promise.all([
     faceapi.nets.tinyFaceDetector.loadFromUri('./models'), 
     faceapi.nets.faceLandmark68Net.loadFromUri('./models'),
@@ -17,19 +17,16 @@ Promise.all([
 
 function setup() {
     loadCamera();
-    //loadTracker();
     loadCanvas(windowWidth,windowHeight);
 }
 
 function draw() {
     background(0,0,0);
     background(120,250,70, chaseBackgroundOpacity);  
-    chase();
-    //fill(120,250,70,chaseBackgroundOpacity);
-   // rect(500,0,200,200);     
+    chase();   
    textSize(18);
 
-     
+ //When face cannot be detected/read text appear on screen    
   if(readFace === false){
     fill(255,0,0);
     text('Cannot read face!',25,25);
@@ -49,7 +46,7 @@ function draw() {
 */
            
 }
-
+// Function to make the background change more smoothly
 function chase(){
     if(chaseBackgroundOpacity < backgroundOpacity){
         chaseBackgroundOpacity += chaseSpeed;
@@ -60,6 +57,7 @@ function chase(){
 
 }
 
+//STARTING VIDEO FEED
 function startVideo() {
 if (navigator.mediaDevices.getUserMedia) {
   navigator.mediaDevices.getUserMedia({ video: true })
@@ -67,32 +65,33 @@ if (navigator.mediaDevices.getUserMedia) {
       video.srcObject = stream;
     })
     .catch(function (err0r) {
+      // Log the error if we can't get access to the webcam
       console.log("Something went wrong with video feed!");
+      
     });
 }
 }
   
+//ADD EVENTLISTENER ON VIDEO ELEMENT
   video.addEventListener('play', () => {
-   // const canvas = faceapi.createCanvasFromMedia(video)
-    //document.body.append(canvas)
-    //const displaySize = { width: video.width, height: video.height }
-    //faceapi.matchDimensions(canvas, displaySize)
+    console.log('EventListener added on video');
+
+    //TRY TO DETECT FACES EVERY 100 MILLISECONDS
     setInterval(async () => {
       try{
+      //OBS! CALLING DETECTALLFACES FUNCTION DOES NOT WORK ON ALL COMPUTERS!
       const detections = await faceapi.detectAllFaces(video, new faceapi.TinyFaceDetectorOptions()).withFaceLandmarks().withFaceExpressions()
       localHappyCounter += detections[0].expressions.happy;
+      console.log(detections[0].expressions);
       timesRun ++;
       readFace = true;
     }
-      //const resizedDetections = faceapi.resizeResults(detections, displaySize)
-      //canvas.getContext('2d').clearRect(0, 0, canvas.width, canvas.height)
-      //faceapi.draw.drawDetections(canvas, resizedDetections)
-      //faceapi.draw.drawFaceLandmarks(canvas, resizedDetections)
-      //faceapi.draw.drawFaceExpressions(canvas, resizedDetections)
+
     
  
       catch (err){
       console.log(err);
+      //console.log("Something went wrong with face api!");
       readFace = false;
       }
 
