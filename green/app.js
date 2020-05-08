@@ -48,10 +48,8 @@ var client = mqtt.connect(MQTTBrokerUrl, clientOptions);
 var Topic = "LesiEmotionChat"; // CHANGE THIS TO SOMETHING UNIQUE TO YOUR PROJECT
 var connectTopic = Topic + "-connect";
 var happyTopic = Topic + "-happy";
-var backgroundTopic = Topic + "-background";
+var promptTopic = Topic + "-prompt";
 
-// We use a timer in order to only show the interface after we are fairly certain we have a unique ID
-var connectionTimer = null;
 
 // Since clientIds are random, we also keep a numerical ID which is easier to work with
 var numericId = 1;
@@ -84,7 +82,7 @@ client.on("connect", function (connack) {
     }
   });
 
-  client.subscribe(backgroundTopic, function (err) {
+  client.subscribe(promptTopic, function (err) {
     // If we get an error show it on the console so we can see what went wrong
     if (err) {
       console.log("connection error");
@@ -109,8 +107,14 @@ client.on("message", function (topic, payload) {
     if(convertedPayload.clientId !== clientOptions.clientId && convertedPayload.id === numericId) {
 			// We get this message if someone has already claimed this ID
 			if(convertedPayload.message === 'ID_TAKEN') {
-				// Increase our ID by one
-        numericId++;
+        // We switch to the other ID
+        if(convertedPayload.id === 1){
+          numericId = 2;
+        }
+        if(convertedPayload.id === 2){
+          numericId = 1;
+        }
+        
 
         // We say hello again with our new ID
 				var helloPayload = {
@@ -119,7 +123,7 @@ client.on("message", function (topic, payload) {
 					message : 'HELLO'
         };
         
-        console.log('amount of id: ' + helloPayload.id);
+        console.log('MY ID: ' + helloPayload.id);
 				// We send/publish the payload to the connection topic
 				client.publish(connectTopic, JSON.stringify(helloPayload));
 
@@ -140,19 +144,15 @@ client.on("message", function (topic, payload) {
    
     }
   }
-  /*
-  if (topic === happyTopic) {
-    if (convertedPayload.message === "HAPPY") {
-      console.log('received "HAPPY"');
-	  if (happyCounter <= 255){happyCounter +=1};
-	   }
-  }
-  */
+ 
 
-  if (topic === backgroundTopic) {
-    if (convertedPayload.message === "BACKGROUND_CHANGE") {
-      console.log('received');
+  if (topic === promptTopic) {
+    if (convertedPayload.message === "PROMPT") {
+      //console.log('prompt received');
       backgroundOpacity = convertedPayload.BO;
+      //console.log('BO = ' + (convertedPayload.BO));
+      publishLocalHappyCounter();
+     
     }
   }
 
@@ -171,6 +171,7 @@ var sessionId =
 var token =
   "T1==cGFydG5lcl9pZD00NjY1MTI0MiZzaWc9NWE3YmQxNTg4MTkxZGY1YTNjNmMxMDE3MWQyMTY1NGQ2ZmEzNDQ4YTpzZXNzaW9uX2lkPTJfTVg0ME5qWTFNVEkwTW41LU1UVTROakUyTlRnM05USTJNSDVTYUhSNGFtZ3ZObFJKU0hWeU56RldZWEV3ZVRoMmVXTi1mZyZjcmVhdGVfdGltZT0xNTg2MTY3MzM5Jm5vbmNlPTAuOTQ0MjQ1OTcxNTk0NTU3JnJvbGU9c3Vic2NyaWJlciZleHBpcmVfdGltZT0xNTg2MTcwOTM4JmluaXRpYWxfbGF5b3V0X2NsYXNzX2xpc3Q9";
 
+  
 // Handling all of our errors here by alerting them
 function handleError(error) {
   if (error) {
@@ -193,6 +194,14 @@ fetch(SERVER_BASE_URL + "/session")
   })
   .catch(handleError);
 
+/*
+  Promise.all([
+    faceapi.nets.tinyFaceDetector.loadFromUri('./models'), 
+    faceapi.nets.faceLandmark68Net.loadFromUri('./models'),
+    faceapi.nets.faceExpressionNet.loadFromUri('./models')
+  ]).then(initializeSession()) //when models are loaded --> start video
+  
+*/
 // We initialize a session with our tokbox api key, and the session Id created by the heroku-app
 function initializeSession() {
   var session = OT.initSession(apiKey, sessionId);
@@ -233,3 +242,25 @@ function initializeSession() {
     }
   });
 }
+
+
+///////////////////////////////////////////////////////////////////////
+
+function publishLocalHappyCounter(){
+//console.log('this is localHappyCounter: ' + localHappyCounter);
+//console.log('this is timesrun: ' + timesRun);
+
+  var publishedLocalHappyCounter = localHappyCounter/timesRun;
+  var HappyPayload = {
+    id : numericId,
+    clientId : clientOptions.clientId,
+    message : 'LOCALHAPPYCOUNTER',
+    localHappyCounter : publishedLocalHappyCounter                      
+};
+client.publish(happyTopic, JSON.stringify(HappyPayload));
+//console.log('localHappyCounter published: ' + (publishedLocalHappyCounter) + 'timesRun = ' + (timesRun));
+localHappyCounter = 0; 
+timesRun = 0;
+
+}   
+

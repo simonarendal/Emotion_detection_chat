@@ -44,43 +44,43 @@ function loadCamera() {
 Load ClmTracker, apply to the video element
 
 */
-
+/*
 function loadTracker() {
     // setup tracker
     ctracker = new clm.tracker();
     ctracker.init(pModel);
     ctracker.start(videoInput.elt);
 }
-
+*/
 /*
 
 Get current face feature point positions. Should go into the draw() function
 
 */
-
+/*
 function getPositions() {
     // get array of face marker positions [x, y] format
     positions = ctracker.getCurrentPosition();
 }
 
-
+*/
 /* 
 
 Get current emotion predictions. Should go into the draw() function
 
 */
-
+/*
 function getEmotions() {
     var cp = ctracker.getCurrentParameters();
     predictedEmotions = emotions.meanPredict(cp);
 }
-
+*/
 /*
 
 Emotion-specific global variables
 
 */
-
+/*
 delete emotionModel['disgusted'];
 delete emotionModel['fear'];
 /////////////////// LESI: We delete the other models aswell, besides from 'happy'
@@ -92,4 +92,4 @@ var emotions = new emotionClassifier();
 var predictedEmotions;
 emotions.init(emotionModel);
 var emotionData = emotions.getBlank();
-
+*/

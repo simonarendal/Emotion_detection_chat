@@ -1,35 +1,39 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Login</title>
-  <link rel="stylesheet" href="login-page.css">
-  <script defer src="login-page.js"></script>
+  <title>Document</title>
+  <link href="login-page.css" rel="stylesheet" type="text/css">
+  <style>
+    video {margin: 0 auto;}
+    h2 {text-align:center;}
+    p {margin: auto;}
+    form { justify-items: center;   display: grid;}
+    input {margin-top: 10px;}
+  </style>
+  <script src="./libs/workshop-utils.js"></script>
+  <script src="https://code.jquery.com/jquery-3.4.0.min.js" type="text/javascript"></script>
+  <script src="./libs/p5.js"></script>
+  <script src="./libs/p5.dom.js"></script>
+  <script src="./green/face-api.min.js"></script>
 </head>
 
 <body>
-  <main id="main-holder">
-    <h2 id="login-header">Tak fordi du gider at være med !</h2>
-    
-    <form id="login-form">
-      <div id="disclaimer">
-        <p>Login med kodeordet <em>green</em>, når du har læst nedenstående</p>
-        <ul>
-          <li>Husk at trykke 'OK', når du bliver spurgt om du tillader, at vi gør brug af webcam og mikrofon</li>          
-            <li>Appen bruger dit webcam til at prøve at se, hvordan jeres date går. Resultatet vil vi præsentere for dig, og sammenligne med din egen oplevelse i det opfølgende interview</li>
-          <li>Jeres samtale er fuldstændig privat, da vi hverken ser eller hører på jer, mens i er på date</li>
-        </ul>
-      </div>
-      <input type="password" name="password" id="password-field" class="login-form-field" placeholder="Skriv kodeord her">
-      <input type="submit" value="Login" id="login-form-submit">
-    </form>
-    <div id="login-error-msg-holder">
-      <p id="login-error-msg">Forkert kodeord </p>
-    </div>
-  
-  </main>
-</body>
+  <script defer type="text/javascript" src="sketch.js"></script>
+  <div>
+    <h2 id="login-header">Hi Ulf and Lif, thank you for helping us!</h2>
+  </div>
 
+  <div>
+  <video id="video" width="20%" height="20%" style = "display:flex;"  autoplay muted></video>
+  </div>
+  
+  <form id="login-form">
+    <input type="password" name="password" id="password-field" class="login-form-field" placeholder="Skriv kodeord her">
+    <input type="submit" value="Login" id="login-form-submit">
+  </form>
+  <div id="login-error-msg-holder">
+    <p id="login-error-msg">Forkert kodeord </p>
+  </div>
+</body>
 </html>

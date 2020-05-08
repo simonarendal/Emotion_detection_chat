@@ -27,19 +27,19 @@
 
 var localHappyCounter1 = 0;
 var localHappyCounter2 = 0;
-//var happyCounter = 0;
+
 var numbOfParticipants = 0;
-var backgroundOpacity = 0;
+var backgroundOpacity = 30;
+var averageHappyCounters;
 
-
-function setup(){
-  setInterval(publishBackgroundOpacity,100);
-}
+var no1 = false;
+var no2 = false;
 
 
 var clientOptions = {
     clientId: "mqttjs_" + Math.random().toString(16).substr(2, 8),
   };
+  
   
   // Uncomment one of the three following lines to choose your broker
   // var MQTTBrokerUrl = 'ws://iot.eclipse.org:80/ws';
@@ -58,15 +58,10 @@ var clientOptions = {
   var Topic = "LesiEmotionChat"; // CHANGE THIS TO SOMETHING UNIQUE TO YOUR PROJECT
   var connectTopic = Topic + "-connect";
   var happyTopic = Topic + "-happy";
-  var backgroundTopic = Topic + "-background";
+  var promptTopic = Topic + "-prompt";
   
   
   // We use a timer in order to only show the interface after we are fairly certain we have a unique ID
-  var connectionTimer = null;
-  
-
-
-  //console.log('happyCounter = ' + (happyCounter));
   // When we connect we want to do something
   client.on("connect", function (connack) {
     console.log("connected");
@@ -85,7 +80,7 @@ var clientOptions = {
         }
     });
 
-    client.subscribe(backgroundTopic, function (err) {
+    client.subscribe(promptTopic, function (err) {
       // If we get an error show it on the console so we can see what went wrong
       if (err) {
         console.log("connection error");
@@ -95,7 +90,6 @@ var clientOptions = {
 
 // When we get any kind of message, we want to do something
 client.on("message", function (topic, payload) {
-    //console.log("received message");
     
     // The payload comes in as a Buffer(i.e. incomprehensible bytes), so we need to convert it first
     // This happens by using JSON.parse() after converting the Buffer to a string
@@ -120,47 +114,69 @@ client.on("message", function (topic, payload) {
     }
   
     if (topic === happyTopic) {
-      if (convertedPayload.message === "HAPPY") {
-        console.log('these are the id : ' + convertedPayload.id);
+      if (convertedPayload.message === "LOCALHAPPYCOUNTER") {
+        //console.log('these are the id : ' + convertedPayload.id);
         if(convertedPayload.id === 1){
-            localHappyCounter1 ++;
-            backgroundOpacity +=5;
+          no1 = true;
+          if(convertedPayload.localHappyCounter === null){
+            localHappyCounter1 = 0.2;
             
-           //console.log('client 1 is smiling' +'localHappyCounter1 = '+(localHappyCounter1));
+          }
+          else localHappyCounter1 = convertedPayload.localHappyCounter;
+              
+        }
+        if (convertedPayload.id === 2){
+          no2 = true;
+          if(convertedPayload.localHappyCounter === null){
+            localHappyCounter2 = 0.2;
             
+          }
+          else localHappyCounter2 = convertedPayload.localHappyCounter;
         }
-        if (convertedPayload.id === 2){ 
-            localHappyCounter2 ++;
-            backgroundOpacity +=5;
-           //console.log('client 2 is smiling' + 'localHappyCounter2 = '+(localHappyCounter2));
-        }
-       
+            
       }
-      //createBackgroundOpacity();
+
     }
-    
-    backgroundDecay();
-    //publishBackgroundOpacity();
   });
   
-/*
-function createBackgroundOpacity(){
-    backgroundOpacity =  (localHappyCounter1 + localHappyCounter2) / 2;
-    
-    //return backgroundOpacity; 
-}*/
 
-function publishBackgroundOpacity () {
-    var BackgroundOpacityPayload = {
+
+//this function will return a float. 
+//arguments needed is value of mouseX, and the two ranges' max and min
+function myMap(var1, min1, max1, min2, max2 )
+{
+  var range1 = (max1-min1); //defines range of range1
+  var range2 = (max2-min2); // defines range of range2
+  var convertNum = (var1/range1); //dividing current value of mouseX with range1. 
+  //procentage calculation. How much is one procent..
+
+  //multiplying the result from above to scale the value to new range
+  var var2 = (convertNum * range2); 
+  // Procent regning: ganger det med 100 for at få det i procent. Her ganes med nye range for at skalere den til denne range
+
+  //return var2 
+  return var2;
+}
+
+
+
+
+function sendPrompt () {
+    averageBackground();
+
+    var promptPayload = {
         clientId : clientOptions.clientId,
-        message : 'BACKGROUND_CHANGE',
-        BO: backgroundOpacity,                     
+        message : 'PROMPT',
+        BO: backgroundOpacity
     };
-    client.publish(backgroundTopic, JSON.stringify(BackgroundOpacityPayload));
-    console.log('background opacity published ' + (backgroundOpacity))
+    console.log('BO: ' + (backgroundOpacity));
+
+    client.publish(promptTopic, JSON.stringify(promptPayload));
+    no1 = false;
+    no2 = false;
 }    
 
-function backgroundDecay(){
-backgroundOpacity = backgroundOpacity - backgroundOpacity/100*2;
-
-};
+function averageBackground (){
+   averageHappyCounters = (localHappyCounter1 + localHappyCounter2) / 2;
+   backgroundOpacity = round(myMap(averageHappyCounters, 0, 1, 0, 225))+30;
+  }
