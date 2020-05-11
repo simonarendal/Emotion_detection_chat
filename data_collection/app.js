@@ -29,7 +29,6 @@ var localHappyCounter1 = 0;
 var localHappyCounter2 = 0;
 
 var numbOfParticipants = 0;
-var backgroundOpacity = 30;
 var averageHappyCounters;
 
 var no1 = false;
@@ -143,8 +142,10 @@ client.on("message", function (topic, payload) {
 
 //this function will return a float. 
 //arguments needed is value of mouseX, and the two ranges' max and min
+
 function myMap(var1, min1, max1, min2, max2 )
 {
+  
   var range1 = (max1-min1); //defines range of range1
   var range2 = (max2-min2); // defines range of range2
   var convertNum = (var1/range1); //dividing current value of mouseX with range1. 
@@ -162,21 +163,23 @@ function myMap(var1, min1, max1, min2, max2 )
 
 
 function sendPrompt () {
-    averageBackground();
+    //averageBackground();
 
     var promptPayload = {
         clientId : clientOptions.clientId,
         message : 'PROMPT',
-        BO: backgroundOpacity
+        HC1: int(myMap(localHappyCounter1, 0, 1, 25, 80)),
+        HC2: int(myMap(localHappyCounter2, 0, 1, 25, 80))
     };
-    console.log('BO: ' + (backgroundOpacity));
 
     client.publish(promptTopic, JSON.stringify(promptPayload));
     no1 = false;
     no2 = false;
 }    
 
+/*
 function averageBackground (){
    averageHappyCounters = (localHappyCounter1 + localHappyCounter2) / 2;
    backgroundOpacity = round(myMap(averageHappyCounters, 0, 1, 0, 225))+30;
   }
+*/

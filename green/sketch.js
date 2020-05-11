@@ -1,11 +1,12 @@
+
 const video = document.getElementById('video');
 
-var backgroundOpacity = 30;
+//var backgroundOpacity = 30;
 var localHappyCounter = 0;
 var happyTreshold = 0.2;
 var timesRun = 0;
-var chaseBackgroundOpacity = 0;
-var chaseSpeed = 4;
+//var chaseBackgroundOpacity = 0;
+//var chaseSpeed = 4;
 var readFace = true;
 
 //LOADING ALL THE NEEDED MODELS FROM MODEL FOLDER INSIDE GREEN FOLDER
@@ -21,10 +22,20 @@ function setup() {
 }
 
 function draw() {
-    background(0,0,0);
-    background(120,250,70, chaseBackgroundOpacity);  
-    chase();   
+    background(255);
+    //background(120,250,70, chaseBackgroundOpacity);  
+    //chase();   
    textSize(18);
+   for(var i =0; i< ellipsesRed.length; i++){
+    ellipsesRed[i].createEllipse(6, 214, 160);
+    }
+   
+  for(var i =0; i< ellipsesBlue.length; i++){
+    ellipsesBlue[i].createEllipse(218, 126, 62);
+    }
+
+
+   
 
  //When face cannot be detected/read text appear on screen    
   if(readFace === false){
@@ -47,6 +58,7 @@ function draw() {
            
 }
 // Function to make the background change more smoothly
+/*
 function chase(){
     if(chaseBackgroundOpacity < backgroundOpacity){
         chaseBackgroundOpacity += chaseSpeed;
@@ -56,6 +68,7 @@ function chase(){
     }
 
 }
+*/
 
 //STARTING VIDEO FEED
 function startVideo() {
@@ -82,7 +95,7 @@ if (navigator.mediaDevices.getUserMedia) {
       //OBS! CALLING DETECTALLFACES FUNCTION DOES NOT WORK ON ALL COMPUTERS!
       const detections = await faceapi.detectAllFaces(video, new faceapi.TinyFaceDetectorOptions()).withFaceLandmarks().withFaceExpressions()
       localHappyCounter += detections[0].expressions.happy;
-      console.log(detections[0].expressions);
+      //console.log(detections[0].expressions);
       timesRun ++;
       readFace = true;
     }

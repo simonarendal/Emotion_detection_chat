@@ -1,12 +1,12 @@
 var yValue1 = 0;
 var yValue2 = 0;
-var yValueAverage = 0;
+
 
 function setup(){
 createCanvas(windowWidth, windowHeight);
 background(0,0,0);
-setInterval(sendPrompt,2000);
-setInterval(startTimer,2000);
+setInterval(sendPrompt,100);
+setInterval(startTimer,100);
 }
 
 function draw() {
@@ -47,9 +47,9 @@ function startTimer() {
 
     yValue2 = map(localHappyCounter2, 0,1,0,80);
 
-    yValueAverage = map(averageHappyCounters, 0,1,0,80);
+    //yValueAverage = map(averageHappyCounters, 0,1,0,80);
     
-    console.log('localHappyCounter1: ' + (localHappyCounter1)+':' + ' localHappyCounter2: ' + (localHappyCounter2)+':' + ' averageHappyCounters: ' + (averageHappyCounters)+':' );
+    console.log('localHappyCounter1: ' + (localHappyCounter1) + ' : ' + ' localHappyCounter2: ' + (localHappyCounter2) );
 
 }
 

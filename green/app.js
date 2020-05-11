@@ -25,7 +25,9 @@
 // We generate a random unique clientId when we start
 // MQTT sends messages to everyone, including ourselves, so this is a way to make sure we recognize our own messages
 
-
+let ellipsesBlue = [];
+let ellipsesRed = [];
+let newEllipse;
 
 var clientOptions = {
   clientId: "mqttjs_" + Math.random().toString(16).substr(2, 8),
@@ -53,6 +55,8 @@ var promptTopic = Topic + "-prompt";
 
 // Since clientIds are random, we also keep a numerical ID which is easier to work with
 var numericId = 1;
+var ellipse1 = 0;
+var ellipse2 = 0;
 
 // When we connect we want to do something
 client.on("connect", function (connack) {
@@ -148,9 +152,16 @@ client.on("message", function (topic, payload) {
 
   if (topic === promptTopic) {
     if (convertedPayload.message === "PROMPT") {
-      //console.log('prompt received');
-      backgroundOpacity = convertedPayload.BO;
-      //console.log('BO = ' + (convertedPayload.BO));
+      ellipse1 = convertedPayload.HC1;
+      ellipse2 = convertedPayload.HC2;
+      ellipsesRed.push(new Ellipse(ellipse1,ellipse1, random(0,width/2)));
+
+      ellipsesBlue.push(new Ellipse(ellipse2,ellipse2, random(width/2,width)));
+    
+     
+      
+    //  console.log(convertedPayload.HC1);
+    //  console.log(convertedPayload.HC2);
       publishLocalHappyCounter();
      
     }

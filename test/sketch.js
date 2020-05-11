@@ -52,7 +52,7 @@ if(detectionsBoolean === true) {
     }    
 
 if(isNaN(expression1) === false) {
-    text('Value is a number - The app is working', windowWidth/2, 80);
+    text('Value is a number', windowWidth/2, 80);
 
 }
 if(detectionsBoolean === false) {
@@ -62,7 +62,7 @@ if(detectionsBoolean === false) {
 
 if(isNaN(expression1) === true) {
     fill(255,0,0);
-    text('Value is NOT a number - and app is NOT working', windowWidth/2, 80);
+    text('Value is NOT a number', windowWidth/2, 80);
 }
 
 if(readFace === false){
@@ -82,7 +82,6 @@ text('This is detections: ' + (detections), windowWidth/2, 150 )
     setInterval(async () => {
     try{
     detections = await faceapi.detectAllFaces(video, new faceapi.TinyFaceDetectorOptions()).withFaceLandmarks().withFaceExpressions();
-    console.log(detections2);
     expression = (detections[0].expressions.happy);
     if(detections === undefined) {
         detectionsBoolean = false;
@@ -99,7 +98,7 @@ text('This is detections: ' + (detections), windowWidth/2, 150 )
     }
    
     catch (err){
-    //console.log(err);
+    console.log(err);
     //console.log('something went wrong with face api');
     readFace = false;
 
