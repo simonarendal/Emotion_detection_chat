@@ -5,8 +5,8 @@ var yValue2 = 0;
 function setup(){
 createCanvas(windowWidth, windowHeight);
 background(0,0,0);
-setInterval(sendPrompt,100);
-setInterval(startTimer,100);
+setInterval(sendPrompt,300);
+setInterval(startTimer,300);
 }
 
 function draw() {
@@ -43,9 +43,9 @@ if (no2 === false) {
 
 function startTimer() {
 //console.log('timer started');
-    yValue1 = map(localHappyCounter1, 0,1,0,80);
+    yValue1 = map(localHappyCounter1, 0,1,0,100);
 
-    yValue2 = map(localHappyCounter2, 0,1,0,80);
+    yValue2 = map(localHappyCounter2, 0,1,0,100);
 
     //yValueAverage = map(averageHappyCounters, 0,1,0,80);
     

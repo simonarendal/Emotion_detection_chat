@@ -168,8 +168,8 @@ function sendPrompt () {
     var promptPayload = {
         clientId : clientOptions.clientId,
         message : 'PROMPT',
-        HC1: int(myMap(localHappyCounter1, 0, 1, 25, 80)),
-        HC2: int(myMap(localHappyCounter2, 0, 1, 25, 80))
+        HC1: int(myMap(localHappyCounter1, 0, 1, 0, 1000)),
+        HC2: int(myMap(localHappyCounter2, 0, 1, 0, 1000))
     };
 
     client.publish(promptTopic, JSON.stringify(promptPayload));

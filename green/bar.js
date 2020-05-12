@@ -6,30 +6,30 @@
 //var colB;
 let fadeAmount = 2;
 
-class Ellipse {
+class Bar {
 
-    constructor(w, h, posX) {
-        this.posX = posX;
-        this.posY = random(0, height);
-        this.colR = red;
-        this.colG = green;
-        this.colB = blue;
+    constructor() {
+
         this.fade = 255;
-        this.w = w;
-        this.h = h;
-        //this.size1 = size1;
-        //this.size2 = size2;
 
     }
 
  
-    createEllipse(red,green,blue) {
-    
-    fill(red,green,blue,this.fade);
+    createBar(red,green,blue,show, posX, posY) {
+   let opacity; 
+    if(show >= 1000/barRed.length){
+      opacity = 255;
+    }
+    else opacity = 0;
+
+    fill(red,green,blue,opacity);
     //fill(this.colR, this.colG, this.colB, this.fade);
-    noStroke();
+    stroke(255,255,255);
+    strokeWeight(6);
+    
+
       //ellipse(this.posX, this.posY, this.size1, this.size2);
-    ellipse(this.posX, this.posY, this.w, this.h);
+    rect(posX, posY, windowWidth/2, windowHeight/20, 10, 10, 10, 10);
 
   
     if (this.fade<=11+fadeAmount) this.fade=0; 
