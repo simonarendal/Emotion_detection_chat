@@ -13,7 +13,11 @@ let barBlue = [];
 var chaseBar1 = 0;
 var chaseBar2 = 0;
 
-var chaseSpeed = 4;
+var chaseSpeed = 10;
+
+//background gradient
+var c1, c2;
+var dim;
 
 //LOADING ALL THE NEEDED MODELS FROM MODEL FOLDER INSIDE GREEN FOLDER
 Promise.all([
@@ -34,23 +38,30 @@ function setup() {
     barBlue.push(new Bar());
     }
     
+  
+    c1 = color(255, 158, 0);
+    c2 = color(255, 72, 0);
+    
 }
 
 function draw() {
-    background(255);
+  
+  
+  setGradient(c1, c2);  
+  //background(252, 191, 73);
     
     //background(120,250,70, chaseBackgroundOpacity);  
     chase();   
    textSize(18);
    
    for(var i =0; i< barRed.length; i++){
-    barRed[i].createBar(6, 214, 160, chaseBar1/(i+1),0,windowHeight-(i*windowHeight/barRed.length));
+    barRed[i].createBar(95, 15, 64, chaseBar1/(i+1),10,windowHeight-((i+1)*windowHeight/barRed.length)-(i*5));
     }
    
   
 
    for(var i =0; i< barBlue.length; i++){
-    barBlue[i].createBar(6, 100, 160, chaseBar2/(i+1),windowWidth/2,windowHeight-(i*windowHeight/barBlue.length));
+    barBlue[i].createBar(154, 3, 30, chaseBar2/(i+1),windowWidth-70,windowHeight-((i+1)*windowHeight/barBlue.length)-(i*5));
     }
 
    
@@ -81,20 +92,32 @@ function draw() {
 // Function to make the background change more smoothly
 
 function chase(){
-    if(chaseBar1 < bar1+200){
+    if(chaseBar1 <= bar1+200+(3*chaseSpeed)){
         chaseBar1 += 3*chaseSpeed;
     } 
-    else if (chaseBar1 > bar1+150){
+    if (chaseBar1 >= bar1+(2*chaseSpeed)){
         chaseBar1 -= 2*chaseSpeed;
     }
+    
 
-    if(chaseBar2 < bar2+200){
+    if(chaseBar2 <= bar2+200+(3*chaseSpeed)){
       chaseBar2 += 3*chaseSpeed;
   } 
-  else if (chaseBar2 > bar2+150){
+  if (chaseBar2 >= bar2+(2*chaseSpeed)){
       chaseBar2 -= 2*chaseSpeed;
   }
 
+}
+
+function setGradient(c1, c2) {
+  // noprotect
+  noFill();
+  for (var y = 0; y < height; y++) {
+    var inter = map(y, 0, height, 0, 1);
+    var c = lerpColor(c1, c2, inter);
+    stroke(c);
+    line(0, y, width, y);
+  }
 }
 
 
