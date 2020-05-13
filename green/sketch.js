@@ -9,9 +9,12 @@ var timesRun = 0;
 var readFace = true;
 let barRed = [];
 let barBlue = [];
+let circles =  [];
+
 
 var chaseBar1 = 0;
 var chaseBar2 = 0;
+var chaseBarCollective = 0;
 
 var chaseSpeed = 10;
 
@@ -38,6 +41,9 @@ function setup() {
     barBlue.push(new Bar());
     }
     
+    for(let i = 0; i<100;i++){
+      circles.push(new Ellipse());
+    }
   
     c1 = color(255, 158, 0);
     c2 = color(255, 72, 0);
@@ -54,6 +60,10 @@ function draw() {
     chase();   
    textSize(18);
    
+   for(var i =0; i< circles.length; i++){
+   circles[i].createCircle(i*(TWO_PI/circles.length),chaseBarCollective/(i+1));
+   }
+
    for(var i =0; i< barRed.length; i++){
     barRed[i].createBar(95, 15, 64, chaseBar1/(i+1),10,windowHeight-((i+1)*windowHeight/barRed.length)-(i*5));
     }
@@ -74,7 +84,7 @@ function draw() {
   
   
   /////// DEBUG UI ///////////
-  /*
+  
   fill(0,0,0);
   text('face reading: ' + (readFace),100,100);
  
@@ -83,29 +93,39 @@ function draw() {
   //var happyText =parseFloat(happy).toFixed(2); ;
   //text('Happy: ' + happyText,100,150); //detections er ikke defineret heroppe    ahh okay
   //text('BO: ' + (backgroundOpacity),100,200); 
-  text('chaseBar1: ' + (chaseBar1) + '  chaseBar2: '+  (chaseBar2),100,250);
-  text('Bar1: ' + (bar1) + '  Bar2: '+  (bar2),100,300);
-  */
+  text('chaseBar1: ' + (chaseBar1),100,250);
+  text('chaseBar2: '+  (chaseBar2) ,100,270);
+  text('chaseBarCollective' + (chaseBarCollective),100,290);
+  text('bar1: ' + (bar1),100,340);
+  text('bar2: ' + (bar2),100,360);
+
+  
 
            
 }
 // Function to make the background change more smoothly
 
 function chase(){
-    if(chaseBar1 <= bar1+200+(3*chaseSpeed)){
+    if(chaseBar1 <= bar1+(3*chaseSpeed)){
         chaseBar1 += 3*chaseSpeed;
-    } 
+      } 
     if (chaseBar1 >= bar1+(2*chaseSpeed)){
         chaseBar1 -= 2*chaseSpeed;
-    }
+      } 
     
-
-    if(chaseBar2 <= bar2+200+(3*chaseSpeed)){
+    if(chaseBar2 <= bar2+(3*chaseSpeed)){
       chaseBar2 += 3*chaseSpeed;
-  } 
-  if (chaseBar2 >= bar2+(2*chaseSpeed)){
+      } 
+    if (chaseBar2 >= bar2+(2*chaseSpeed)){
       chaseBar2 -= 2*chaseSpeed;
-  }
+    }
+
+    if (chaseBarCollective <= (bar1+bar2)/2+(chaseSpeed/2)){
+    chaseBarCollective += chaseSpeed/2;
+      }
+    if (chaseBarCollective >= (bar1+bar2)/2+(chaseSpeed/3)){
+    chaseBarCollective -= chaseSpeed/3;
+      }
 
 }
 

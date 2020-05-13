@@ -1,51 +1,40 @@
-//var random = new Random(); 
-////var posX;
-//var posY;
-//var colR;
-//var colG;
-//var colB;
-let fadeAmount = 2;
+
+
+
+
+
+
 
 class Ellipse {
 
-    constructor(w, h, posX) {
-        this.posX = posX;
-        this.posY = random(0, height);
-        this.colR = red;
-        this.colG = green;
-        this.colB = blue;
-        this.fade = 255;
-        this.w = w;
-        this.h = h;
+    constructor() {
+        this.r     = 210;
+        //this.step  = step; //in radians equivalent of 360/6 in degrees
+        
+
         //this.size1 = size1;
         //this.size2 = size2;
 
     }
 
- 
-    createEllipse(red,green,blue) {
-    
-    fill(red,green,blue,this.fade);
-    //fill(this.colR, this.colG, this.colB, this.fade);
-    noStroke();
-      //ellipse(this.posX, this.posY, this.size1, this.size2);
-    ellipse(this.posX, this.posY, this.w, this.h);
-
-  
-    if (this.fade<=11+fadeAmount) this.fade=0; 
- 
-    //if (this.fade>255) fadeAmount=-10; 
-   
-    this.fade -= fadeAmount; 
-    //print(fadeAmount)
-    
+  createCircle(step,show){
+  //move 0,0 to the center of the screen
+  //translate(width/2, height/2);
+  let opacity; 
+  if(show >= 600/circles.length){
+    opacity = 255;
   }
-
-    remove(array, element) {
-    const index = array.indexOf(element);
+  else opacity = 0;
   
-    if (index !== -1) {
-      array.splice(index, 1);
+  //convert polar coordinates to cartesian coordinates
+  var x = windowWidth/2 + this.r * sin(step);
+  var y = windowHeight/2 + this.r * cos(step);
+  
+  //draw ellipse at every x,y point
+  noStroke();
+  fill(255, 40,0,opacity); 
+  ellipse(x, y, 30, 30);
+    
     }
+ 
   }
-}
