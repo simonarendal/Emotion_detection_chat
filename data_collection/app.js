@@ -107,6 +107,7 @@ client.on("message", function (topic, payload) {
             if (convertedPayload.id === 2){
                 console.log("second participant joined")
                 numbOfParticipants = 2;
+                listener();
             }
         }
       }
@@ -173,3 +174,131 @@ function averageBackground (){
    backgroundOpacity = round(myMap(averageHappyCounters, 0, 1, 0, 225))+30;
   }
 */
+
+  ///////////////////////////////////////////////////////////////
+ /////////////////////TOKBOX////////////////////////////////////
+///////////////////////////////////////////////////////////////
+
+//import * as faceapi from '../green/face-api.min.js';
+
+async function playVideo () {
+  await faceapi.nets.tinyFaceDetector.loadFromUri('../green/models'), 
+  await faceapi.nets.faceLandmark68Net.loadFromUri('../green/models'),
+  await faceapi.nets.faceExpressionNet.loadFromUri('../green/models'),
+  initializeSession();
+} 
+
+playVideo();
+
+
+// replace these values with those generated in your TokBox Account
+var apiKey = "46651242";
+var sessionId =
+  "2_MX40NjY1MTI0Mn5-MTU4NjE2NTg3NTI2MH5SaHR4amgvNlRJSHVyNzFWYXEweTh2eWN-fg";
+var token =
+  "T1==cGFydG5lcl9pZD00NjY1MTI0MiZzaWc9NWE3YmQxNTg4MTkxZGY1YTNjNmMxMDE3MWQyMTY1NGQ2ZmEzNDQ4YTpzZXNzaW9uX2lkPTJfTVg0ME5qWTFNVEkwTW41LU1UVTROakUyTlRnM05USTJNSDVTYUhSNGFtZ3ZObFJKU0hWeU56RldZWEV3ZVRoMmVXTi1mZyZjcmVhdGVfdGltZT0xNTg2MTY3MzM5Jm5vbmNlPTAuOTQ0MjQ1OTcxNTk0NTU3JnJvbGU9c3Vic2NyaWJlciZleHBpcmVfdGltZT0xNTg2MTcwOTM4JmluaXRpYWxfbGF5b3V0X2NsYXNzX2xpc3Q9";
+
+var videoSrc;
+// Handling all of our errors here by alerting them
+function handleError(error) {
+  if (error) {
+    alert(error.message);
+  }
+}
+
+// (optional) add server code here
+// This connects to our heroku-app that serves the clients with sessions and tokens
+var SERVER_BASE_URL = "https://emotion-detection-01.herokuapp.com";
+fetch(SERVER_BASE_URL + "/session")
+  .then(function (res) {
+    return res.json();
+  })
+  .then(function (res) {
+    apiKey = res.apiKey;
+    sessionId = res.sessionId;
+    token = res.token;
+    //initializeSession();
+  })
+  .catch(handleError);
+
+  /*
+  async function playVideo () {
+    await faceapi.nets.tinyFaceDetector.loadFromUri('../green/models'), 
+    await faceapi.nets.faceLandmark68Net.loadFromUri('../green/models'),
+    await faceapi.nets.faceExpressionNet.loadFromUri('../green/models'),
+    listener();
+  } 
+  
+  playVideo();
+  */
+// We initialize a session with our tokbox api key, and the session Id created by the heroku-app
+function initializeSession() {
+
+
+
+  var session = OT.initSession(apiKey, sessionId);
+
+  // We want clients to be able to subscribe to (or view) each other's streams in the session.
+  // Subscribe to a newly created stream
+  session.on("streamCreated", function (event) {
+    var subscriber = session.subscribe(event.stream, {insertDefaultUI: false});
+    subscriber.on('videoElementCreated', function(event) {
+    var videoElement = document.getElementById('videos').appendChild(event.element);
+      console.log('this is element: ' + videoElement.srcObject);
+    videoSrc = videoElement.srcObject;
+    //var isActive = videoSrc.id;
+    console.log('videoSrc1: ' + videoSrc);  
+    });
+  });
+
+
+  /*
+  // Create a publisher so the clients send/publish their webcam stream
+  var publisher = OT.initPublisher(
+    "publisher",
+    {
+      insertMode: "append",
+      width: "100%",
+      height: "100%",
+    },
+    handleError
+  );
+*/
+
+  // Connect to the session
+  session.connect(token, function (error) {
+    // If the connection is successful, publish to the session
+    if (error) {
+      handleError(error);
+    } else {
+      //session.publish(publisher, handleError);
+    }
+  });
+
+
+}
+
+function listener() {
+//ADD EVENTLISTENER ON VIDEO ELEMENT
+console.log('inside listener');
+videoSrc.addEventListener('playing', function() {
+  console.log('EventListener added on video');
+
+   //TRY TO DETECT FACES EVERY 100 MILLISECONDS
+   setInterval(async () => {
+     try{
+     //OBS! CALLING DETECTALLFACES FUNCTION DOES NOT WORK ON ALL COMPUTERS!
+     
+     //const detections = await faceapi.detectSingleFace(video, new faceapi.TinyFaceDetectorOptions()).withFaceLandmarks().withFaceExpressions()
+     const detections = await faceapi.detectAllFaces(video8, new faceapi.TinyFaceDetectorOptions()).withFaceExpressions()
+     console.log('happy: ' + (detections[0].expressions.happy));
+    }
+    
+    catch (err){
+      console.log(err);
+      //console.log("Something went wrong with face api!");
+      readFace = false;
+      }
+    }, 200)
+  })
+}

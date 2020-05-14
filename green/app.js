@@ -242,7 +242,7 @@ function initializeSession() {
   );
 
   // Connect to the session
-  session.connect(token, function (error) {
+/*  session.connect(token, function (error) {
     // If the connection is successful, publish to the session
     if (error) {
       handleError(error);
@@ -250,6 +250,19 @@ function initializeSession() {
       session.publish(publisher, handleError);
     }
   });
+*/
+  session.connect(token, function(error) {
+    if (error) {
+      console.log(error.message);
+    } else {
+      var publisherOptions = {width: 400, height:300, name:(numericId)};
+      // This assumes that there is a DOM element with the ID 'publisher':
+      publisher = OT.initPublisher('publisher', publisherOptions);
+      session.publish(publisher);
+    }
+  });
+
+
 }
 
 
