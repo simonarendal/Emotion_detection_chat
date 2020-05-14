@@ -75,7 +75,7 @@ function draw() {/*
 
 */
  // console.log('video8: ' + video8);
-  console.log('video9: ' + video9);
+  // console.log('video9: ' + video9);
 
   
   setGradient(c1, c2);  
