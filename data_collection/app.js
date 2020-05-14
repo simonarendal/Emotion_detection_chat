@@ -117,24 +117,14 @@ client.on("message", function (topic, payload) {
         //console.log('these are the id : ' + convertedPayload.id);
         if(convertedPayload.id === 1){
           no1 = true;
-          if(convertedPayload.localHappyCounter === null){
-            localHappyCounter1 = 0.2;
-            
-          }
-          else localHappyCounter1 = convertedPayload.localHappyCounter;
+          localHappyCounter1 = convertedPayload.localHappyCounter;
               
         }
         if (convertedPayload.id === 2){
           no2 = true;
-          if(convertedPayload.localHappyCounter === null){
-            localHappyCounter2 = 0.2;
-            
-          }
-          else localHappyCounter2 = convertedPayload.localHappyCounter;
+          localHappyCounter2 = convertedPayload.localHappyCounter;
         }
-            
       }
-
     }
   });
   

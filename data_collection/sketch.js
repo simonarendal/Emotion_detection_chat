@@ -5,8 +5,9 @@ var yValue2 = 0;
 function setup(){
 createCanvas(windowWidth, windowHeight);
 background(0,0,0);
-setInterval(sendPrompt,300);
-setInterval(startTimer,300);
+setInterval(sendPrompt,500);
+setInterval(startTimer,500);
+
 }
 
 function draw() {

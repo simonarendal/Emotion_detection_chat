@@ -21,7 +21,7 @@ class Ellipse {
   //move 0,0 to the center of the screen
   //translate(width/2, height/2);
   let opacity; 
-  if(show >= 600/circles.length){
+  if(show >= 1000/circles.length){
     opacity = 255;
   }
   else opacity = 0;

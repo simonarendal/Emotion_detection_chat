@@ -1,4 +1,18 @@
-const video = document.getElementById('video');
+//const video = document.getElementById('video');
+const video1 = document.getElementsByClassName('OT_video-element');
+const video2 = document.getElementsByTagName("video")[0];
+const video3 = document.getElementsByTagName("video").item(0);
+const video4 = document.getElementsByTagName("video")[1];
+const video5 = document.getElementsByTagName("video").item(1);
+const video6 = document.getElementById('subscriber').childNodes.length;
+const video7 = document.getElementsByTagName('OT_video-element');
+const video8 = document.querySelector('#subscriber > video > video.ot_video-element');
+
+const video9 = document.getElementsByClassName("OT_video-element");
+
+ 
+
+const test = document.getElementsByClassName('test');
 //var detections;
 //var backgroundOpacity = 30;
 var localHappyCounter = 0;
@@ -50,8 +64,19 @@ function setup() {
     
 }
 
-function draw() {
-  
+function draw() {/*
+  console.log('video: ' + video);
+
+  console.log('video1: ' + video1);
+  console.log('video2: ' + video2);
+  console.log('video3: ' + video3);
+  console.log('video6: ' + video6);
+  //console.log('video7: ' + video7);
+
+*/
+ // console.log('video8: ' + video8);
+  console.log('video9: ' + video9);
+
   
   setGradient(c1, c2);  
   //background(252, 191, 73);
@@ -95,9 +120,11 @@ function draw() {
   //text('BO: ' + (backgroundOpacity),100,200); 
   text('chaseBar1: ' + (chaseBar1),100,250);
   text('chaseBar2: '+  (chaseBar2) ,100,270);
-  text('chaseBarCollective' + (chaseBarCollective),100,290);
+  text('chaseBarCollective:  ' + (chaseBarCollective),100,290);
   text('bar1: ' + (bar1),100,340);
   text('bar2: ' + (bar2),100,360);
+  text('my ID: ' + (numericId),100,400);
+  text('timesRun: ' + (timesRun),100,420);
 
   
 
@@ -109,22 +136,22 @@ function chase(){
     if(chaseBar1 <= bar1+(3*chaseSpeed)){
         chaseBar1 += 3*chaseSpeed;
       } 
-    if (chaseBar1 >= bar1+(2*chaseSpeed)){
+    else if (chaseBar1 >= bar1+(2*chaseSpeed)){
         chaseBar1 -= 2*chaseSpeed;
       } 
     
     if(chaseBar2 <= bar2+(3*chaseSpeed)){
       chaseBar2 += 3*chaseSpeed;
       } 
-    if (chaseBar2 >= bar2+(2*chaseSpeed)){
+    else if (chaseBar2 >= bar2+(2*chaseSpeed)){
       chaseBar2 -= 2*chaseSpeed;
     }
 
     if (chaseBarCollective <= (bar1+bar2)/2+(chaseSpeed/2)){
     chaseBarCollective += chaseSpeed/2;
       }
-    if (chaseBarCollective >= (bar1+bar2)/2+(chaseSpeed/3)){
-    chaseBarCollective -= chaseSpeed/3;
+    else if (chaseBarCollective >= (bar1+bar2)/2+(chaseSpeed/8)){
+    chaseBarCollective -= chaseSpeed/8;
       }
 
 }
@@ -157,8 +184,8 @@ if (navigator.mediaDevices.getUserMedia) {
 }
   
 //ADD EVENTLISTENER ON VIDEO ELEMENT
-  video.addEventListener('play', () => {
-    console.log('EventListener added on video');
+  video8.addEventListener('playing', function() {
+   // console.log('EventListener added on video');
 
     //TRY TO DETECT FACES EVERY 100 MILLISECONDS
     setInterval(async () => {
@@ -166,15 +193,22 @@ if (navigator.mediaDevices.getUserMedia) {
       //OBS! CALLING DETECTALLFACES FUNCTION DOES NOT WORK ON ALL COMPUTERS!
       
       //const detections = await faceapi.detectSingleFace(video, new faceapi.TinyFaceDetectorOptions()).withFaceLandmarks().withFaceExpressions()
-      const detections = await faceapi.detectAllFaces(video, new faceapi.TinyFaceDetectorOptions()).withFaceExpressions()
-      localHappyCounter += detections[0].expressions.happy;
+      const detections = await faceapi.detectAllFaces(video8, new faceapi.TinyFaceDetectorOptions()).withFaceExpressions()
+      
+      
+      if(detections[0].expressions.happy === null){
+        console.log('detections was null');
+        localHappyCounter += 0.2;
+      }
+      else {
+        localHappyCounter += detections[0].expressions.happy;
+        //console.log('LOCALHAPPYCOUNTER: ' + localHappyCounter);
+      }
       //console.log(detections[0].expressions);
       timesRun ++;
       readFace = true;
     }
 
-    
- 
       catch (err){
       console.log(err);
       //console.log("Something went wrong with face api!");
