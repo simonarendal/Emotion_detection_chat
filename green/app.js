@@ -48,8 +48,7 @@ var client = mqtt.connect(MQTTBrokerUrl, clientOptions);
 //
 var Topic = "LesiEmotionChat"; // CHANGE THIS TO SOMETHING UNIQUE TO YOUR PROJECT
 var connectTopic = Topic + "-connect";
-var happyTopic = Topic + "-happy";
-var promptTopic = Topic + "-prompt";
+var feedbackTopic = Topic + "-feedback";
 
 
 // Since clientIds are random, we also keep a numerical ID which is easier to work with
@@ -78,14 +77,8 @@ client.on("connect", function (connack) {
     }
   });
 
-  client.subscribe(happyTopic, function (err) {
-    // If we get an error show it on the console so we can see what went wrong
-    if (err) {
-      console.log("connection error");
-    }
-  });
-
-  client.subscribe(promptTopic, function (err) {
+ 
+  client.subscribe(feedbackTopic, function (err) {
     // If we get an error show it on the console so we can see what went wrong
     if (err) {
       console.log("connection error");
@@ -148,24 +141,12 @@ client.on("message", function (topic, payload) {
     }
   }
  
-
-  if (topic === promptTopic) {
-    if (convertedPayload.message === "PROMPT") {
+  if (topic === feedbackTopic) {
+    if (convertedPayload.message === "FEEDBACK") {
       bar1 = convertedPayload.HC1;
       bar2 = convertedPayload.HC2;
-      
-
-
-      
-      
-    //  console.log(convertedPayload.HC1);
-    //  console.log(convertedPayload.HC2);
-      publishLocalHappyCounter();
-     
     }
   }
-
-
 });
 
 
@@ -203,14 +184,6 @@ fetch(SERVER_BASE_URL + "/session")
   })
   .catch(handleError);
 
-/*
-  Promise.all([
-    faceapi.nets.tinyFaceDetector.loadFromUri('./models'), 
-    faceapi.nets.faceLandmark68Net.loadFromUri('./models'),
-    faceapi.nets.faceExpressionNet.loadFromUri('./models')
-  ]).then(initializeSession()) //when models are loaded --> start video
-  
-*/
 // We initialize a session with our tokbox api key, and the session Id created by the heroku-app
 function initializeSession() {
   var session = OT.initSession(apiKey, sessionId);
@@ -241,47 +214,15 @@ function initializeSession() {
     handleError
   );
 
-  // Connect to the session
-/*  session.connect(token, function (error) {
-    // If the connection is successful, publish to the session
-    if (error) {
-      handleError(error);
-    } else {
-      session.publish(publisher, handleError);
-    }
-  });
-*/
   session.connect(token, function(error) {
     if (error) {
       console.log(error.message);
     } else {
-      var publisherOptions = {width: 400, height:300, name:(numericId)};
+      var publisherOptions = {name : (numericId)};
       // This assumes that there is a DOM element with the ID 'publisher':
       publisher = OT.initPublisher('publisher', publisherOptions);
       session.publish(publisher);
     }
   });
-
-
 }
 
-
-///////////////////////////////////////////////////////////////////////
-
-function publishLocalHappyCounter(){
-//console.log('this is localHappyCounter: ' + localHappyCounter);
-//console.log('this is timesrun: ' + timesRun);
-
-  var publishedLocalHappyCounter = localHappyCounter/timesRun;
-  var HappyPayload = {
-    id : numericId,
-    clientId : clientOptions.clientId,
-    message : 'LOCALHAPPYCOUNTER',
-    localHappyCounter : publishedLocalHappyCounter                      
-};
-client.publish(happyTopic, JSON.stringify(HappyPayload));
-//console.log('localHappyCounter published: ' + (publishedLocalHappyCounter) + 'timesRun = ' + (timesRun));
-localHappyCounter = 0; 
-timesRun = 0;
-
-}   

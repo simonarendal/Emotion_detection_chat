@@ -2,8 +2,6 @@ body, html {
     background-color:black;
     width: 100%;
     height: 100%;
-    padding: 0; 
-    margin: 0;
     z-index: 40;
 }
 
@@ -16,11 +14,10 @@ body, html {
     height: 100%;
     z-index: 10;
 }
-
 #subscriber {
     position: absolute;
-    width: 400px;
-    height: 400px;
+    width: 450px;
+    height: 450px;
     z-index: 101;
     border: 3px solid red;
     border-radius: 50%;
@@ -35,24 +32,17 @@ body, html {
 
 #publisher {
     position: absolute;
-    width: 30%;
-    height: 30%;
+    width: 70px;
+    height: 70px;
     bottom: 10px;
-    left: 10px;
-    z-index: 100;
+    left: 60%;
+    z-index: 101;
     border: 3px solid white;
-    border-radius: 3px;
+    border-radius: 50%;
 }
-
-#video {
+.OT_widget-container {
     position: absolute;
-    left: 99px;
-    top: 20%;
-    width: 1%;
-    height: 1%;
-    z-index: 1;
-    border: 1px solid white;
-    border-radius: 1px;
-    bottom: 10px;
-    opacity: 0%;
+    background-color: black;
+    overflow: hidden;
+    border-radius: 100%;
 }

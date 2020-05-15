@@ -27,13 +27,9 @@
 
 var localHappyCounter1 = 0;
 var localHappyCounter2 = 0;
-
 var numbOfParticipants = 0;
-var averageHappyCounters;
-
-var no1 = false;
-var no2 = false;
-
+var readFace1 = false;
+var readFace2 = false;
 
 var clientOptions = {
     clientId: "mqttjs_" + Math.random().toString(16).substr(2, 8),
@@ -56,8 +52,7 @@ var clientOptions = {
   //
   var Topic = "LesiEmotionChat"; // CHANGE THIS TO SOMETHING UNIQUE TO YOUR PROJECT
   var connectTopic = Topic + "-connect";
-  var happyTopic = Topic + "-happy";
-  var promptTopic = Topic + "-prompt";
+  var feedbackTopic = Topic + "-feedback";
   
   
   // We use a timer in order to only show the interface after we are fairly certain we have a unique ID
@@ -71,15 +66,8 @@ var clientOptions = {
           console.log("connection error");
         }
       });
-    
-      client.subscribe(happyTopic, function (err) {
-        // If we get an error show it on the console so we can see what went wrong
-        if (err) {
-          console.log("connection error");
-        }
-    });
 
-    client.subscribe(promptTopic, function (err) {
+    client.subscribe(feedbackTopic, function (err) {
       // If we get an error show it on the console so we can see what went wrong
       if (err) {
         console.log("connection error");
@@ -107,26 +95,13 @@ client.on("message", function (topic, payload) {
             if (convertedPayload.id === 2){
                 console.log("second participant joined")
                 numbOfParticipants = 2;
-                listener();
+                
             }
         }
       }
     }
   
-    if (topic === happyTopic) {
-      if (convertedPayload.message === "LOCALHAPPYCOUNTER") {
-        //console.log('these are the id : ' + convertedPayload.id);
-        if(convertedPayload.id === 1){
-          no1 = true;
-          localHappyCounter1 = convertedPayload.localHappyCounter;
-              
-        }
-        if (convertedPayload.id === 2){
-          no2 = true;
-          localHappyCounter2 = convertedPayload.localHappyCounter;
-        }
-      }
-    }
+
   });
   
 
@@ -151,41 +126,26 @@ function myMap(var1, min1, max1, min2, max2 )
 }
 
 
-
-
-function sendPrompt () {
-    //averageBackground();
-
-    var promptPayload = {
+function sendFeedback () {
+    var feedbackPayload = {
         clientId : clientOptions.clientId,
-        message : 'PROMPT',
+        message : 'FEEDBACK',
         HC1: int(myMap(localHappyCounter1, 0, 1, 0, 1000)),
         HC2: int(myMap(localHappyCounter2, 0, 1, 0, 1000))
     };
 
-    client.publish(promptTopic, JSON.stringify(promptPayload));
-    no1 = false;
-    no2 = false;
+    client.publish(feedbackTopic, JSON.stringify(feedbackPayload));
 }    
 
-/*
-function averageBackground (){
-   averageHappyCounters = (localHappyCounter1 + localHappyCounter2) / 2;
-   backgroundOpacity = round(myMap(averageHappyCounters, 0, 1, 0, 225))+30;
-  }
-*/
 
   ///////////////////////////////////////////////////////////////
  /////////////////////TOKBOX////////////////////////////////////
 ///////////////////////////////////////////////////////////////
 
-//import * as faceapi from '../green/face-api.min.js';
 
-async function playVideo () {
-  await faceapi.nets.tinyFaceDetector.loadFromUri('../green/models'), 
-  await faceapi.nets.faceLandmark68Net.loadFromUri('../green/models'),
-  await faceapi.nets.faceExpressionNet.loadFromUri('../green/models'),
-  initializeSession();
+function playVideo () {
+  faceapi.nets.tinyFaceDetector.loadFromUri('../green/models'), 
+  faceapi.nets.faceExpressionNet.loadFromUri('../green/models')
 } 
 
 playVideo();
@@ -198,13 +158,14 @@ var sessionId =
 var token =
   "T1==cGFydG5lcl9pZD00NjY1MTI0MiZzaWc9NWE3YmQxNTg4MTkxZGY1YTNjNmMxMDE3MWQyMTY1NGQ2ZmEzNDQ4YTpzZXNzaW9uX2lkPTJfTVg0ME5qWTFNVEkwTW41LU1UVTROakUyTlRnM05USTJNSDVTYUhSNGFtZ3ZObFJKU0hWeU56RldZWEV3ZVRoMmVXTi1mZyZjcmVhdGVfdGltZT0xNTg2MTY3MzM5Jm5vbmNlPTAuOTQ0MjQ1OTcxNTk0NTU3JnJvbGU9c3Vic2NyaWJlciZleHBpcmVfdGltZT0xNTg2MTcwOTM4JmluaXRpYWxfbGF5b3V0X2NsYXNzX2xpc3Q9";
 
-var videoSrc;
 // Handling all of our errors here by alerting them
+
 function handleError(error) {
   if (error) {
     alert(error.message);
   }
 }
+
 
 // (optional) add server code here
 // This connects to our heroku-app that serves the clients with sessions and tokens
@@ -217,83 +178,91 @@ fetch(SERVER_BASE_URL + "/session")
     apiKey = res.apiKey;
     sessionId = res.sessionId;
     token = res.token;
-    //initializeSession();
+    initializeSession();
   })
   .catch(handleError);
 
-  /*
-  async function playVideo () {
-    await faceapi.nets.tinyFaceDetector.loadFromUri('../green/models'), 
-    await faceapi.nets.faceLandmark68Net.loadFromUri('../green/models'),
-    await faceapi.nets.faceExpressionNet.loadFromUri('../green/models'),
-    listener();
-  } 
-  
-  playVideo();
-  */
 // We initialize a session with our tokbox api key, and the session Id created by the heroku-app
 function initializeSession() {
-
-
 
   var session = OT.initSession(apiKey, sessionId);
 
   // We want clients to be able to subscribe to (or view) each other's streams in the session.
   // Subscribe to a newly created stream
+ 
+ 
+
   session.on("streamCreated", function (event) {
-    var subscriber = session.subscribe(event.stream, {insertDefaultUI: false});
-    subscriber.on('videoElementCreated', function(event) {
-    var videoElement = document.getElementById('videos').appendChild(event.element);
-      console.log('this is element: ' + videoElement.srcObject);
+    console.log("New stream in the session: " + event.stream.name);
+    if(event.stream.name == 1){ 
+      console.log('stream1');
+      var subscriber = session.subscribe(event.stream, { insertDefaultUI: false });
+      subscriber.on('videoElementCreated', function (event) {
+      var videoElement = document.getElementById('subscriber1').appendChild(event.element);
+      
 
-      let assignVideoSrc = function () {
-        videoSrc = videoElement.srcObject;
-      }
-
-      assignVideoSrc().then(function () {
-        videoSrc.addEventListener('playing', function () {
-          console.log('EventListener added on video');
+      document.getElementById("myBtn").addEventListener("click", function(){
 
           //TRY TO DETECT FACES EVERY 100 MILLISECONDS
           setInterval(async () => {
             try {
               //OBS! CALLING DETECTALLFACES FUNCTION DOES NOT WORK ON ALL COMPUTERS!
+              const detections = await faceapi.detectAllFaces(videoElement, new faceapi.TinyFaceDetectorOptions()).withFaceExpressions()
 
-              //const detections = await faceapi.detectSingleFace(video, new faceapi.TinyFaceDetectorOptions()).withFaceLandmarks().withFaceExpressions()
-              const detections = await faceapi.detectAllFaces(video8, new faceapi.TinyFaceDetectorOptions()).withFaceExpressions()
-              console.log('happy: ' + (detections[0].expressions.happy));
+
+              localHappyCounter1 = (detections[0].expressions.happy);
+              console.log('happy1: ' + localHappyCounter1);
+
+              readFace1 = true;
+
             }
 
             catch (err) {
-              console.log(err);
+              localHappyCounter1 = 0.2;
+              readFace1 = false;
+              console.log('happy1: ' + localHappyCounter1);
+              //console.log(err);
               //console.log("Something went wrong with face api!");
-              readFace = false;
+            }
+          }, 200)
+          
+        })
+      })
+    }
+    
+    if(event.stream.name == 2){ 
+      console.log('stream2');
+      var subscriber = session.subscribe(event.stream, { insertDefaultUI: false });
+      subscriber.on('videoElementCreated', function (event) {
+      var videoElement = document.getElementById('subscriber2').appendChild(event.element);
+      
+
+      document.getElementById("myBtn").addEventListener("click", function(){
+
+          //TRY TO DETECT FACES EVERY 100 MILLISECONDS
+          setInterval(async () => {
+            try {
+              //OBS! CALLING DETECTALLFACES FUNCTION DOES NOT WORK ON ALL COMPUTERS!
+              const detections = await faceapi.detectAllFaces(videoElement, new faceapi.TinyFaceDetectorOptions()).withFaceExpressions()
+         
+            localHappyCounter2 = (detections[0].expressions.happy);
+            readFace2 = true;            
+          }
+
+            catch (err) {
+              localHappyCounter2 = 0.2;
+              readFace2 = false;
+             // console.log(err);
+              //console.log("Something went wrong with face api!");
             }
           }, 200)
         })
-
       })
-      
-    //var isActive = videoSrc.id;
-    console.log('videoSrc1: ' + videoSrc);  
-    });
-  });
+    }
+       
+      });
 
-
-  /*
-  // Create a publisher so the clients send/publish their webcam stream
-  var publisher = OT.initPublisher(
-    "publisher",
-    {
-      insertMode: "append",
-      width: "100%",
-      height: "100%",
-    },
-    handleError
-  );
-*/
-
-  // Connect to the session
+        // Connect to the session
   session.connect(token, function (error) {
     // If the connection is successful, publish to the session
     if (error) {
@@ -302,31 +271,12 @@ function initializeSession() {
       //session.publish(publisher, handleError);
     }
   });
-
-
-}
-
-function listener() {
-//ADD EVENTLISTENER ON VIDEO ELEMENT
-console.log('inside listener');
-videoSrc.addEventListener('playing', function() {
-  console.log('EventListener added on video');
-
-   //TRY TO DETECT FACES EVERY 100 MILLISECONDS
-   setInterval(async () => {
-     try{
-     //OBS! CALLING DETECTALLFACES FUNCTION DOES NOT WORK ON ALL COMPUTERS!
-     
-     //const detections = await faceapi.detectSingleFace(video, new faceapi.TinyFaceDetectorOptions()).withFaceLandmarks().withFaceExpressions()
-     const detections = await faceapi.detectAllFaces(video8, new faceapi.TinyFaceDetectorOptions()).withFaceExpressions()
-     console.log('happy: ' + (detections[0].expressions.happy));
     }
-    
-    catch (err){
-      console.log(err);
-      //console.log("Something went wrong with face api!");
-      readFace = false;
-      }
-    }, 200)
-  })
-}
+
+
+
+
+
+
+
+

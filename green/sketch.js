@@ -1,25 +1,6 @@
-//const video = document.getElementById('video');
-const video1 = document.getElementsByClassName('OT_video-element');
-const video2 = document.getElementsByTagName("video")[0];
-const video3 = document.getElementsByTagName("video").item(0);
-const video4 = document.getElementsByTagName("video")[1];
-const video5 = document.getElementsByTagName("video").item(1);
-const video6 = document.getElementById('subscriber').childNodes.length;
-const video7 = document.getElementsByTagName('OT_video-element');
-const video8 = document.querySelector('#subscriber > video > video.ot_video-element');
-
-const video9 = document.getElementsByClassName("OT_video-element");
-
- 
-
-const test = document.getElementsByClassName('test');
-//var detections;
-//var backgroundOpacity = 30;
 var localHappyCounter = 0;
 var happyTreshold = 0.2;
 var timesRun = 0;
-//var chaseBackgroundOpacity = 0;
-//var chaseSpeed = 4;
 var readFace = true;
 let barRed = [];
 let barBlue = [];
@@ -36,17 +17,13 @@ var chaseSpeed = 10;
 var c1, c2;
 var dim;
 
-//LOADING ALL THE NEEDED MODELS FROM MODEL FOLDER INSIDE GREEN FOLDER
-Promise.all([
-    faceapi.nets.tinyFaceDetector.loadFromUri('./models'), 
-    //faceapi.nets.faceLandmark68Net.loadFromUri('./models'),
-    faceapi.nets.faceExpressionNet.loadFromUri('./models')
-  ]).then(startVideo) //when models are loaded --> start video
 
 function setup() {
-    loadCamera();
-    loadCanvas(windowWidth,windowHeight);
-    
+
+  var cnv = createCanvas(windowWidth, windowHeight);
+  cnv.position(0,0);
+  background(255, 0, 200);
+
     for(let i =0; i< 20; i++){
     barRed.push(new Bar());
     }
@@ -64,27 +41,16 @@ function setup() {
     
 }
 
-function draw() {/*
-  console.log('video: ' + video);
+function windowResized() {
+  resizeCanvas(windowWidth, windowHeight);
+}
 
-  console.log('video1: ' + video1);
-  console.log('video2: ' + video2);
-  console.log('video3: ' + video3);
-  console.log('video6: ' + video6);
-  //console.log('video7: ' + video7);
-
-*/
- // console.log('video8: ' + video8);
-  // console.log('video9: ' + video9);
-
+function draw() {
+  background(255,255,255);
+  setGradient(c1, c2);      
+  chase();   
+  textSize(18);
   
-  setGradient(c1, c2);  
-  //background(252, 191, 73);
-    
-    //background(120,250,70, chaseBackgroundOpacity);  
-    chase();   
-   textSize(18);
-   
    for(var i =0; i< circles.length; i++){
    circles[i].createCircle(i*(TWO_PI/circles.length),chaseBarCollective/(i+1));
    }
@@ -93,7 +59,6 @@ function draw() {/*
     barRed[i].createBar(95, 15, 64, chaseBar1/(i+1),10,windowHeight-((i+1)*windowHeight/barRed.length)-(i*5));
     }
    
-  
 
    for(var i =0; i< barBlue.length; i++){
     barBlue[i].createBar(154, 3, 30, chaseBar2/(i+1),windowWidth-70,windowHeight-((i+1)*windowHeight/barBlue.length)-(i*5));
@@ -166,55 +131,3 @@ function setGradient(c1, c2) {
     line(0, y, width, y);
   }
 }
-
-
-//STARTING VIDEO FEED
-function startVideo() {
-if (navigator.mediaDevices.getUserMedia) {
-  navigator.mediaDevices.getUserMedia({ video: true })
-    .then(function (stream) {
-      video.srcObject = stream;
-    })
-    .catch(function (err0r) {
-      // Log the error if we can't get access to the webcam
-      console.log("Something went wrong with video feed!");
-      
-    });
-}
-}
-  
-//ADD EVENTLISTENER ON VIDEO ELEMENT
-  video8.addEventListener('playing', function() {
-   // console.log('EventListener added on video');
-
-    //TRY TO DETECT FACES EVERY 100 MILLISECONDS
-    setInterval(async () => {
-      try{
-      //OBS! CALLING DETECTALLFACES FUNCTION DOES NOT WORK ON ALL COMPUTERS!
-      
-      //const detections = await faceapi.detectSingleFace(video, new faceapi.TinyFaceDetectorOptions()).withFaceLandmarks().withFaceExpressions()
-      const detections = await faceapi.detectAllFaces(video8, new faceapi.TinyFaceDetectorOptions()).withFaceExpressions()
-      
-      
-      if(detections[0].expressions.happy === null){
-        console.log('detections was null');
-        localHappyCounter += 0.2;
-      }
-      else {
-        localHappyCounter += detections[0].expressions.happy;
-        //console.log('LOCALHAPPYCOUNTER: ' + localHappyCounter);
-      }
-      //console.log(detections[0].expressions);
-      timesRun ++;
-      readFace = true;
-    }
-
-      catch (err){
-      console.log(err);
-      //console.log("Something went wrong with face api!");
-      readFace = false;
-      }
-
-    }, 200)
-  })
-

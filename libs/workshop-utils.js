@@ -18,7 +18,7 @@ Load & align the canvas to match the underlying html5 video element
 
 function loadCanvas(w, h) {
     canvas = createCanvas(w, h);
-    canvas.position(0,0);
+    //canvas.position(0,0);
 }
 
 /*
