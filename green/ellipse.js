@@ -1,14 +1,7 @@
-
-
-
-
-
-
-
 class Ellipse {
 
     constructor() {
-        this.r     = 210;
+        this.r = 230;
         //this.step  = step; //in radians equivalent of 360/6 in degrees
         
 
@@ -21,7 +14,7 @@ class Ellipse {
   //move 0,0 to the center of the screen
   //translate(width/2, height/2);
   let opacity; 
-  if(show >= 1000/circles.length){
+  if(show >= 1000/circlesSubscriber.length){
     opacity = 255;
   }
   else opacity = 0;

@@ -142,9 +142,13 @@ client.on("message", function (topic, payload) {
   }
  
   if (topic === feedbackTopic) {
+    console.log("feedback received");
     if (convertedPayload.message === "FEEDBACK") {
       bar1 = convertedPayload.HC1;
       bar2 = convertedPayload.HC2;
+      readFace1 = convertedPayload.RF1;
+      readFace2 = convertedPayload.RF2;
+      
     }
   }
 });

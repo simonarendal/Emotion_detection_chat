@@ -31,6 +31,9 @@ var numbOfParticipants = 0;
 var readFace1 = false;
 var readFace2 = false;
 
+var videoElement1;
+var videoElement2;
+
 var clientOptions = {
     clientId: "mqttjs_" + Math.random().toString(16).substr(2, 8),
   };
@@ -124,16 +127,21 @@ function myMap(var1, min1, max1, min2, max2 )
   //return var2 
   return var2;
 }
+  
 
 
 function sendFeedback () {
+  console.log('feedback sent');
     var feedbackPayload = {
         clientId : clientOptions.clientId,
         message : 'FEEDBACK',
         HC1: int(myMap(localHappyCounter1, 0, 1, 0, 1000)),
-        HC2: int(myMap(localHappyCounter2, 0, 1, 0, 1000))
+        HC2: int(myMap(localHappyCounter2, 0, 1, 0, 1000)),
+        RF1: readFace1,
+        RF2: readFace2
+        
     };
-
+   
     client.publish(feedbackTopic, JSON.stringify(feedbackPayload));
 }    
 
@@ -190,28 +198,59 @@ function initializeSession() {
   // We want clients to be able to subscribe to (or view) each other's streams in the session.
   // Subscribe to a newly created stream
  
- 
+
 
   session.on("streamCreated", function (event) {
     console.log("New stream in the session: " + event.stream.name);
+    
     if(event.stream.name == 1){ 
       console.log('stream1');
       var subscriber = session.subscribe(event.stream, { insertDefaultUI: false });
       subscriber.on('videoElementCreated', function (event) {
-      var videoElement = document.getElementById('subscriber1').appendChild(event.element);
+      videoElement1 = document.getElementById('subscriber1').appendChild(event.element);
+      })
+      setInterval(detect1, 200);
+    }
       
+    
+    if(event.stream.name == 2){ 
+      console.log('stream2');
+      var subscriber = session.subscribe(event.stream, { insertDefaultUI: false });
+      subscriber.on('videoElementCreated', function (event) {
+      videoElement2 = document.getElementById('subscriber2').appendChild(event.element);
+      })
+        setInterval(detect2, 200);
+      }
 
-      document.getElementById("myBtn").addEventListener("click", function(){
+      
+ });      
+     
+
+
+        // Connect to the session
+  session.connect(token, function (error) {
+    // If the connection is successful, publish to the session
+    if (error) {
+      handleError(error);
+    } else {
+      //session.publish(publisher, handleError);
+    }
+  });
+}
+    
+
 
           //TRY TO DETECT FACES EVERY 100 MILLISECONDS
-          setInterval(async () => {
+          async function detect1 () {
             try {
               //OBS! CALLING DETECTALLFACES FUNCTION DOES NOT WORK ON ALL COMPUTERS!
-              const detections = await faceapi.detectAllFaces(videoElement, new faceapi.TinyFaceDetectorOptions()).withFaceExpressions()
+              const detections1 = await faceapi.detectAllFaces(videoElement1, new faceapi.TinyFaceDetectorOptions()).withFaceExpressions()
 
 
-              localHappyCounter1 = (detections[0].expressions.happy);
+              localHappyCounter1 = (detections1[0].expressions.happy);
+
               console.log('happy1: ' + localHappyCounter1);
+
 
               readFace1 = true;
 
@@ -224,57 +263,33 @@ function initializeSession() {
               //console.log(err);
               //console.log("Something went wrong with face api!");
             }
-          }, 200)
+          }
+
           
-        })
-      })
-    }
-    
-    if(event.stream.name == 2){ 
-      console.log('stream2');
-      var subscriber = session.subscribe(event.stream, { insertDefaultUI: false });
-      subscriber.on('videoElementCreated', function (event) {
-      var videoElement = document.getElementById('subscriber2').appendChild(event.element);
-      
-
-      document.getElementById("myBtn").addEventListener("click", function(){
-
-          //TRY TO DETECT FACES EVERY 100 MILLISECONDS
-          setInterval(async () => {
+           //TRY TO DETECT FACES EVERY 100 MILLISECONDS
+           async function detect2 () {
             try {
               //OBS! CALLING DETECTALLFACES FUNCTION DOES NOT WORK ON ALL COMPUTERS!
-              const detections = await faceapi.detectAllFaces(videoElement, new faceapi.TinyFaceDetectorOptions()).withFaceExpressions()
-         
-            localHappyCounter2 = (detections[0].expressions.happy);
-            readFace2 = true;            
-          }
+              const detections2 = await faceapi.detectAllFaces(videoElement2, new faceapi.TinyFaceDetectorOptions()).withFaceExpressions()
+
+
+              localHappyCounter2 = (detections2[0].expressions.happy);
+
+              console.log('happy2: ' + localHappyCounter2);
+
+
+              readFace2 = true;
+
+            }
 
             catch (err) {
               localHappyCounter2 = 0.2;
               readFace2 = false;
-             // console.log(err);
+              console.log('happy2: ' + localHappyCounter2);
+              //console.log(err);
               //console.log("Something went wrong with face api!");
             }
-          }, 200)
-        })
-      })
-    }
-       
-      });
-
-        // Connect to the session
-  session.connect(token, function (error) {
-    // If the connection is successful, publish to the session
-    if (error) {
-      handleError(error);
-    } else {
-      //session.publish(publisher, handleError);
-    }
-  });
-    }
-
-
-
+          }
 
 
 

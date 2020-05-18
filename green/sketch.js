@@ -1,12 +1,9 @@
-var localHappyCounter = 0;
-var happyTreshold = 0.2;
-var timesRun = 0;
-var readFace = true;
-let barRed = [];
-let barBlue = [];
-let circles =  [];
+var readFace1 = true;
+var readFace2 = true;
+let circlesPublisher =  [];
+let circlesSubscriber =  [];
 
-
+var opacity;
 var chaseBar1 = 0;
 var chaseBar2 = 0;
 var chaseBarCollective = 0;
@@ -16,6 +13,7 @@ var chaseSpeed = 10;
 //background gradient
 var c1, c2;
 var dim;
+let publisher;
 
 
 function setup() {
@@ -23,22 +21,18 @@ function setup() {
   var cnv = createCanvas(windowWidth, windowHeight);
   cnv.position(0,0);
   background(255, 0, 200);
-
-    for(let i =0; i< 20; i++){
-    barRed.push(new Bar());
-    }
-
-    for(let i =0; i< 20; i++){
-    barBlue.push(new Bar());
-    }
     
     for(let i = 0; i<100;i++){
-      circles.push(new Ellipse());
+      circlesSubscriber.push(new Ellipse());
+    }
+
+    for(let i = 0; i<100;i++){
+      circlesPublisher.push(new Publisher());
     }
   
     c1 = color(255, 158, 0);
     c2 = color(255, 72, 0);
-    
+    publisher = new Publisher();
 }
 
 function windowResized() {
@@ -46,15 +40,35 @@ function windowResized() {
 }
 
 function draw() {
-  background(255,255,255);
-  setGradient(c1, c2);      
+  background(0,0,0);
+  
+  background(220,155,55,opacity);
+
+  backgroundOpacity();
+
+  publisher.drawPublisher();
+  //setGradient(c1, c2);      
   chase();   
   textSize(18);
-  
-   for(var i =0; i< circles.length; i++){
-   circles[i].createCircle(i*(TWO_PI/circles.length),chaseBarCollective/(i+1));
+  if(numericId ===1){
+   for(var i =0; i< circlesSubscriber.length; i++){
+    circlesSubscriber[i].createCircle(i*(TWO_PI/circlesSubscriber.length),chaseBar2/(i+1));
    }
 
+   for(var i =0; i< circlesPublisher.length; i++){
+    circlesPublisher[i].createCircle(i*(TWO_PI/circlesPublisher.length),chaseBar1/(i+1));
+    }
+  }
+
+/*
+  else if(numericId ===2){
+    for(var i =0; i< circles.length; i++){
+      circles[i].createCircle(i*(TWO_PI/circles.length),chaseBar1/(i+1));
+  }
+}
+*/
+   
+/*
    for(var i =0; i< barRed.length; i++){
     barRed[i].createBar(95, 15, 64, chaseBar1/(i+1),10,windowHeight-((i+1)*windowHeight/barRed.length)-(i*5));
     }
@@ -64,32 +78,39 @@ function draw() {
     barBlue[i].createBar(154, 3, 30, chaseBar2/(i+1),windowWidth-70,windowHeight-((i+1)*windowHeight/barBlue.length)-(i*5));
     }
 
-   
+   */
 
  //When face cannot be detected/read text appear on screen    
-  if(readFace === false){
+  if(readFace1 === false && numericId ===1){
     fill(255,0,0);
-    text('Cannot read face!',25,25);
+    text('Cannot read face!',50,25);
+  }
+
+  if(readFace2 === false && numericId === 2){
+    fill(255,0,0);
+    text('Cannot read face!',50,25);
   }
   
   
   /////// DEBUG UI ///////////
-  
-  fill(0,0,0);
-  text('face reading: ' + (readFace),100,100);
+  stroke(255,255,255);
+strokeWeight(0.5);
+  fill(255,255,255);
  
-  //console.log('this is happy: ' + happy);
-  //var happy = localHappyCounter/timesRun;
-  //var happyText =parseFloat(happy).toFixed(2); ;
-  //text('Happy: ' + happyText,100,150); //detections er ikke defineret heroppe    ahh okay
-  //text('BO: ' + (backgroundOpacity),100,200); 
-  text('chaseBar1: ' + (chaseBar1),100,250);
-  text('chaseBar2: '+  (chaseBar2) ,100,270);
-  text('chaseBarCollective:  ' + (chaseBarCollective),100,290);
-  text('bar1: ' + (bar1),100,340);
-  text('bar2: ' + (bar2),100,360);
-  text('my ID: ' + (numericId),100,400);
-  text('timesRun: ' + (timesRun),100,420);
+
+  text('my ID: ' + (numericId),30,50);
+
+  text('bar1: ' + (bar1),30,110);
+  text('chaseBar1: ' + (chaseBar1),30,130);
+
+  text('bar2: ' + (bar2),30,160);
+  text('chaseBar2: '+  (chaseBar2) ,30,180);
+
+  text('chaseBarCollective:  ' + (chaseBarCollective),30,210);
+  
+  text('face reading 1: ' + (readFace1),30,240);
+  text('face reading 2: ' + (readFace2),30,260);
+
 
   
 
@@ -119,6 +140,13 @@ function chase(){
     chaseBarCollective -= chaseSpeed/8;
       }
 
+}
+
+
+
+function backgroundOpacity () {
+  opacity = map(chaseBarCollective,0,1000,0,255);
+  
 }
 
 function setGradient(c1, c2) {
