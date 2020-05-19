@@ -35,6 +35,17 @@ function setup() {
     publisher = new Publisher();
 }
 
+
+function setGradient(c1, c2) {
+  // noprotect
+  noFill();
+  for (var y = 0; y < height; y++) {
+    var inter = map(y, 0, height, 0, 1);
+    var c = lerpColor(c1, c2, inter);
+    stroke(c);
+    line(0, y, width, y);
+  }
+}
 function windowResized() {
   resizeCanvas(windowWidth, windowHeight);
 }
@@ -45,7 +56,7 @@ function draw() {
   //background(220,155,55,opacity);
 
   backgroundOpacity();
-
+  //c1 = color(opacity, 158, 0);
   publisher.drawPublisher();
   setGradient(c1, c2);      
   chase();   
@@ -85,7 +96,7 @@ function draw() {
   
   /////// DEBUG UI ///////////
   stroke(255,255,255);
-strokeWeight(0.5);
+  strokeWeight(0.5);
   fill(255,255,255);
  
 
@@ -140,13 +151,3 @@ function backgroundOpacity () {
   
 }
 
-function setGradient(c1, c2) {
-  // noprotect
-  noFill();
-  for (var y = 0; y < height; y++) {
-    var inter = map(y, 0, height, 0, 1);
-    var c = lerpColor(c1, c2, inter);
-    stroke(c);
-    line(0, y, width, y);
-  }
-}
