@@ -210,6 +210,7 @@ function initializeSession() {
       videoElement1 = document.getElementById('subscriber1').appendChild(event.element);
       })
       setInterval(detect1, 200);
+      
     }
       
     
@@ -263,6 +264,7 @@ function initializeSession() {
               //console.log(err);
               //console.log("Something went wrong with face api!");
             }
+            sendFeedback();
           }
 
           
@@ -289,6 +291,7 @@ function initializeSession() {
               //console.log(err);
               //console.log("Something went wrong with face api!");
             }
+            sendFeedback();
           }
 
 
