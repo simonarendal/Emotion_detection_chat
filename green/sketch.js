@@ -42,8 +42,7 @@ function drawSubscriber(){
     ellipse((width/2), (height/2), 509,509);
     fill(255, 100, 0);
     ellipse((width/2), (height/2), 450,450);
-
-    
+  
 
     fill(255);
     textSize(16);
@@ -92,7 +91,7 @@ function draw() {
      circlesPublisher[i].createCircle(i*(TWO_PI/circlesPublisher.length),chaseBar2/(i+1));
     }
  
-    for(var i =0; i< circlesPublisher.length; i++){
+    for(var i =0; i< circlesSubscriber.length; i++){
      circlesSubscriber[i].createCircle(i*(TWO_PI/circlesSubscriber.length),chaseBar1/(i+1));
      }
    }
@@ -101,21 +100,28 @@ function draw() {
  //When face cannot be detected/read text appear on screen    
   if(readFace1 === false && numericId ===1){
     fill(255,0,0);
-    text('Cannot read face!',50,25);
+    strokeWeight(1);
+    stroke(0,0,0);
+    textSize(25);
+    text('Cannot read face!',(width/2)-100,55);
   }
 
   if(readFace2 === false && numericId === 2){
     fill(255,0,0);
-    text('Cannot read face!',50,25);
+    strokeWeight(1);
+    stroke(0,0,0);
+    textSize(25);
+    text('Cannot read face!',(width/2)-100,55);
   }
   
   
-  /////// DEBUG UI ///////////
   stroke(255,255,255);
   strokeWeight(0.5);
   fill(255,255,255);
  
-
+  
+  /////// DEBUG UI ///////////
+  /*
   text('my ID: ' + (numericId),30,50);
 
   text('bar1: ' + (bar1),30,110);
@@ -128,7 +134,7 @@ function draw() {
   
   text('face reading 1: ' + (readFace1),30,240);
   text('face reading 2: ' + (readFace2),30,260);
-
+*/
 
   
 

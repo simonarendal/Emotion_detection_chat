@@ -4,8 +4,8 @@ class Publisher {
         this.r = 105;
         this.w = 200; 
         this.h = 200;
-        this.x = (width/2) - (width/5);
-        this.y = (height/2)+(height/5);
+        this.x = (width/2) - 240;
+        this.y = (height/2)+(240);
     }
 
 

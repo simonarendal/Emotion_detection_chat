@@ -19,8 +19,7 @@ body, html {
     position: absolute;
     width: 450px;
     height: 450px;
-    z-index: 101;
-    border-radius: 50%;
+    z-index: 110;
 }
 
 .OT_widget-container {

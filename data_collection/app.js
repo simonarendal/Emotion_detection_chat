@@ -203,7 +203,7 @@ function initializeSession() {
       subscriber.on('videoElementCreated', function (event) {
       videoElement1 = document.getElementById('subscriber1').appendChild(event.element);
       })
-      setInterval(detect1, 200);
+      setInterval(detect1, 400);
       
     }
       
@@ -214,7 +214,7 @@ function initializeSession() {
       subscriber.on('videoElementCreated', function (event) {
       videoElement2 = document.getElementById('subscriber2').appendChild(event.element);
       })
-        setInterval(detect2, 200);
+        setInterval(detect2, 400);
       }
 
       
