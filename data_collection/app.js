@@ -27,6 +27,7 @@
 
 var localHappyCounter1 = 0;
 var localHappyCounter2 = 0;
+var collectiveHappyCounter = 0;
 var numbOfParticipants = 0;
 var readFace1 = false;
 var readFace2 = false;
@@ -134,6 +135,7 @@ function sendFeedback () {
         message : 'FEEDBACK',
         HC1: int(myMap(localHappyCounter1, 0, 1, 0, 1000)),
         HC2: int(myMap(localHappyCounter2, 0, 1, 0, 1000)),
+        CHC: int(myMap((localHappyCounter1+localHappyCounter2)/2, 0, 1, 0, 1000)),
         RF1: readFace1,
         RF2: readFace2
       

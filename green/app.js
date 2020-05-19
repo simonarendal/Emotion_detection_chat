@@ -55,6 +55,7 @@ var feedbackTopic = Topic + "-feedback";
 var numericId = 1;
 var bar1 = 0;
 var bar2 = 0;
+var barCollective = 0;
 
 // When we connect we want to do something
 client.on("connect", function (connack) {
@@ -146,6 +147,7 @@ client.on("message", function (topic, payload) {
     if (convertedPayload.message === "FEEDBACK") {
       bar1 = convertedPayload.HC1;
       bar2 = convertedPayload.HC2;
+      barCollective = convertedPayload.CHC;
       readFace1 = convertedPayload.RF1;
       readFace2 = convertedPayload.RF2;
       

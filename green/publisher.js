@@ -13,13 +13,13 @@ class Publisher {
       noStroke();
       fill(200,200,200);
         ellipse(this.x, this.y, this.w+20, this.h+20);
-        fill(255, 100, 0);
+        fill(216, 69, 86);
         ellipse(this.x, this.y, this.w, this.h);
-        
-
         fill(255);
-        textSize(16);
-        text("Her er jeg", this.x-10, this.y);
+        textStyle(BOLD);
+        textSize(20);
+        textFont('Verdana');
+        text("Her er du", this.x-50, this.y);
     }
 
     createCircle(step,show){
@@ -37,7 +37,7 @@ class Publisher {
         
         //draw ellipse at every x,y point
         noStroke();
-        fill(255, 40,0,opacity); 
+        fill(101, 55, 111,opacity); 
         ellipse(x, y, 12, 12);
           
           }
