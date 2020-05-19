@@ -108,7 +108,6 @@ client.on("message", function (topic, payload) {
   });
   
 
-
 //this function will return a float. 
 //arguments needed is value of mouseX, and the two ranges' max and min
 
@@ -127,11 +126,9 @@ function myMap(var1, min1, max1, min2, max2 )
   //return var2 
   return var2;
 }
-  
-
-
+ 
 function sendFeedback () {
-  console.log('feedback sent');
+  //console.log('feedback sent');
     var feedbackPayload = {
         clientId : clientOptions.clientId,
         message : 'FEEDBACK',
@@ -139,7 +136,7 @@ function sendFeedback () {
         HC2: int(myMap(localHappyCounter2, 0, 1, 0, 1000)),
         RF1: readFace1,
         RF2: readFace2
-        
+      
     };
    
     client.publish(feedbackTopic, JSON.stringify(feedbackPayload));
@@ -174,7 +171,6 @@ function handleError(error) {
   }
 }
 
-
 // (optional) add server code here
 // This connects to our heroku-app that serves the clients with sessions and tokens
 var SERVER_BASE_URL = "https://emotion-detection-01.herokuapp.com";
@@ -198,8 +194,6 @@ function initializeSession() {
   // We want clients to be able to subscribe to (or view) each other's streams in the session.
   // Subscribe to a newly created stream
  
-
-
   session.on("streamCreated", function (event) {
     console.log("New stream in the session: " + event.stream.name);
     
@@ -247,22 +241,17 @@ function initializeSession() {
               //OBS! CALLING DETECTALLFACES FUNCTION DOES NOT WORK ON ALL COMPUTERS!
               const detections1 = await faceapi.detectAllFaces(videoElement1, new faceapi.TinyFaceDetectorOptions()).withFaceExpressions()
 
-
               localHappyCounter1 = (detections1[0].expressions.happy);
-
               console.log('happy1: ' + localHappyCounter1);
-
-
               readFace1 = true;
 
             }
 
             catch (err) {
-              localHappyCounter1 = 0.2;
+              localHappyCounter1 = 0;
               readFace1 = false;
-              console.log('happy1: ' + localHappyCounter1);
-              //console.log(err);
-              //console.log("Something went wrong with face api!");
+              console.log('readFace1 false');
+             
             }
             sendFeedback();
           }
@@ -274,22 +263,16 @@ function initializeSession() {
               //OBS! CALLING DETECTALLFACES FUNCTION DOES NOT WORK ON ALL COMPUTERS!
               const detections2 = await faceapi.detectAllFaces(videoElement2, new faceapi.TinyFaceDetectorOptions()).withFaceExpressions()
 
-
               localHappyCounter2 = (detections2[0].expressions.happy);
-
               console.log('happy2: ' + localHappyCounter2);
-
-
               readFace2 = true;
 
             }
 
             catch (err) {
-              localHappyCounter2 = 0.2;
+              localHappyCounter2 = 0;
               readFace2 = false;
-              console.log('happy2: ' + localHappyCounter2);
-              //console.log(err);
-              //console.log("Something went wrong with face api!");
+              console.log('readFace2 false');
             }
             sendFeedback();
           }

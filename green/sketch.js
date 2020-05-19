@@ -8,7 +8,7 @@ var chaseBar1 = 0;
 var chaseBar2 = 0;
 var chaseBarCollective = 0;
 
-var chaseSpeed = 10;
+var chaseSpeed = 6;
 
 //background gradient
 var c1, c2;
@@ -22,11 +22,11 @@ function setup() {
   cnv.position(0,0);
   background(255, 0, 200);
     
-    for(let i = 0; i<100;i++){
+    for(let i = 0; i<200;i++){
       circlesSubscriber.push(new Ellipse());
     }
 
-    for(let i = 0; i<100;i++){
+    for(let i = 0; i<150;i++){
       circlesPublisher.push(new Publisher());
     }
   
@@ -125,10 +125,10 @@ function chase(){
     }
 
     if (chaseBarCollective <= (bar1+bar2)/2+(chaseSpeed/2)){
-    chaseBarCollective += chaseSpeed/2;
+    chaseBarCollective += chaseSpeed/3;
       }
     else if (chaseBarCollective >= (bar1+bar2)/2+(chaseSpeed/8)){
-    chaseBarCollective -= chaseSpeed/8;
+    chaseBarCollective -= chaseSpeed/10;
       }
 
 }
