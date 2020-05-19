@@ -4,7 +4,7 @@ var yValue2 = 0;
  function setup(){
     createCanvas(windowWidth, windowHeight);
     background(0,0,0);
-    setInterval(sendFeedback, 500);
+    //setInterval(sendFeedback, 500);
     }
 
   function draw() {

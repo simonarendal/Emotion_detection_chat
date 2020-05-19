@@ -39,6 +39,7 @@ body, html {
     z-index: 101;
     border: 3px solid white;
     border-radius: 50%;
+    opacity: 0%;
 }
 
 

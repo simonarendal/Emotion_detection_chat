@@ -71,25 +71,16 @@ function draw() {
     }
   }
 
-/*
   else if(numericId ===2){
-    for(var i =0; i< circles.length; i++){
-      circles[i].createCircle(i*(TWO_PI/circles.length),chaseBar1/(i+1));
-  }
-}
-*/
-   
-/*
-   for(var i =0; i< barRed.length; i++){
-    barRed[i].createBar(95, 15, 64, chaseBar1/(i+1),10,windowHeight-((i+1)*windowHeight/barRed.length)-(i*5));
+    for(var i =0; i< circlesPublisher.length; i++){
+     circlesPublisher[i].createCircle(i*(TWO_PI/circlesPublisher.length),chaseBar2/(i+1));
     }
-   
+ 
+    for(var i =0; i< circlesPublisher.length; i++){
+     circlesSubscriber[i].createCircle(i*(TWO_PI/circlesSubscriber.length),chaseBar1/(i+1));
+     }
+   }
 
-   for(var i =0; i< barBlue.length; i++){
-    barBlue[i].createBar(154, 3, 30, chaseBar2/(i+1),windowWidth-70,windowHeight-((i+1)*windowHeight/barBlue.length)-(i*5));
-    }
-
-   */
 
  //When face cannot be detected/read text appear on screen    
   if(readFace1 === false && numericId ===1){
