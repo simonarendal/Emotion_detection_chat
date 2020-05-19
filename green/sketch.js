@@ -3,7 +3,8 @@ var readFace2 = true;
 let circlesPublisher =  [];
 let circlesSubscriber =  [];
 
-var opacity;
+var opacity1;
+var opacity2;
 var chaseBar1 = 0;
 var chaseBar2 = 0;
 var chaseBarCollective = 0;
@@ -30,8 +31,8 @@ function setup() {
       circlesPublisher.push(new Publisher());
     }
   
-    c1 = color(255, 158, 0);
     c2 = color(255, 72, 0);
+    //c2 = color(255, 158, 0);
     publisher = new Publisher();
 }
 
@@ -58,6 +59,8 @@ function draw() {
   backgroundOpacity();
   //c1 = color(opacity, 158, 0);
   publisher.drawPublisher();
+  console.log('opacity: ' + opacity1);
+  c1 = color(255, opacity1, 0);
   setGradient(c1, c2);      
   chase();   
   textSize(18);
@@ -147,7 +150,6 @@ function chase(){
 
 
 function backgroundOpacity () {
-  opacity = map(chaseBarCollective,0,1000,0,255);
-  
+  opacity1 = map(chaseBarCollective,0,1000,220,70);
 }
 
