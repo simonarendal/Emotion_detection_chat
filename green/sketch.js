@@ -35,15 +35,28 @@ function setup() {
     publisher = new Publisher();
 }
 
+function drawSubscriber(){
+  fill(200,200,200);
+  noStroke();
+    ellipse((width/2), (height/2), 509,509);
+    fill(255, 100, 0);
+    ellipse((width/2), (height/2), 450,450);
+
+    
+
+    fill(255);
+    textSize(16);
+    text("Her er din date", this.x-10, this.y);
+}
 
 function setGradient(c1, c2) {
   // noprotect
   noFill();
-  for (var y = 0; y < height; y++) {
-    var inter = map(y, 0, height, 0, 1);
+  for (var opacity = 0; opacity < height; opacity++) {
+    var inter = map(opacity, 0, height, 0, 1);
     var c = lerpColor(c1, c2, inter);
     stroke(c);
-    line(0, y, width, y);
+    line(0, opacity, width, opacity);
   }
 }
 function windowResized() {
@@ -52,7 +65,7 @@ function windowResized() {
 
 function draw() {
   //background(0,0,0);
-  
+  drawSubscriber();
   //background(220,155,55,opacity);
 
   backgroundOpacity();
