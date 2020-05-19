@@ -198,10 +198,12 @@ function initializeSession() {
  
   session.on("streamCreated", function (event) {
     console.log("New stream in the session: " + event.stream.name);
-    
-    if(event.stream.name == 1){ 
+     if(event.stream.name == 1){ 
       console.log('stream1');
       var subscriber = session.subscribe(event.stream, { insertDefaultUI: false });
+      subscriber.subscribeToAudio(false);
+      subscriber.setPreferredFrameRate(3);
+      subscriber.setPreferredResolution(320,240);
       subscriber.on('videoElementCreated', function (event) {
       videoElement1 = document.getElementById('subscriber1').appendChild(event.element);
       })
@@ -213,6 +215,9 @@ function initializeSession() {
     if(event.stream.name == 2){ 
       console.log('stream2');
       var subscriber = session.subscribe(event.stream, { insertDefaultUI: false });
+      subscriber.subscribeToAudio(false);
+      subscriber.setPreferredFrameRate(3);
+      subscriber.setPreferredResolution(320,240);
       subscriber.on('videoElementCreated', function (event) {
       videoElement2 = document.getElementById('subscriber2').appendChild(event.element);
       })
