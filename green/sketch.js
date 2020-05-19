@@ -31,7 +31,7 @@ function setup() {
     }
   
     c1 = color(255, 158, 0);
-    c2 = color(255, 72, 0);
+    //c2 = color(255, 72, 0);
     publisher = new Publisher();
 }
 
@@ -40,14 +40,14 @@ function windowResized() {
 }
 
 function draw() {
-  background(0,0,0);
+  //background(0,0,0);
   
-  background(220,155,55,opacity);
+  //background(220,155,55,opacity);
 
   backgroundOpacity();
 
   publisher.drawPublisher();
-  //setGradient(c1, c2);      
+  setGradient(c1, c2);      
   chase();   
   textSize(18);
   if(numericId ===1){
