@@ -4,15 +4,19 @@ class Publisher {
         this.r = 105;
         this.w = 200; 
         this.h = 200;
-        this.x = 250;
-        this.y = 400;
+        this.x = (width/2) - (width/5);
+        this.y = (height/2)+(height/5);
     }
 
 
     drawPublisher(){
+      noStroke();
+      fill(200,200,200);
+        ellipse(this.x, this.y, this.w+20, this.h+20);
         fill(255, 100, 0);
-        noStroke();
         ellipse(this.x, this.y, this.w, this.h);
+        
+
         fill(255);
         textSize(16);
         text("Her er jeg", this.x-10, this.y);
@@ -34,7 +38,7 @@ class Publisher {
         //draw ellipse at every x,y point
         noStroke();
         fill(255, 40,0,opacity); 
-        ellipse(x, y, 15, 15);
+        ellipse(x, y, 12, 12);
           
           }
  

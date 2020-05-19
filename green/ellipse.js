@@ -1,7 +1,8 @@
 class Ellipse {
 
     constructor() {
-        this.r = 230;
+        this.r = 240;
+        
         //this.step  = step; //in radians equivalent of 360/6 in degrees
         
 
@@ -9,6 +10,8 @@ class Ellipse {
         //this.size2 = size2;
 
     }
+
+    
 
   createCircle(step,show){
   //move 0,0 to the center of the screen
