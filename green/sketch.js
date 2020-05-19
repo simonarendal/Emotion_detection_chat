@@ -31,7 +31,7 @@ function setup() {
       circlesPublisher.push(new Publisher());
     }
   
-    c2 = color(255, 72, 0);
+    
     //c2 = color(255, 158, 0);
     publisher = new Publisher();
 }
@@ -40,7 +40,7 @@ function drawSubscriber(){
   fill(200,200,200);
   noStroke();
     ellipse((width/2), (height/2), 509,509);
-    fill(255, 100, 0);
+    fill(0, 0, 0);
     ellipse((width/2), (height/2), 450,450);
   
 
@@ -72,7 +72,8 @@ function draw() {
   //c1 = color(opacity, 158, 0);
   publisher.drawPublisher();
   console.log('opacity: ' + opacity1);
-  c1 = color(255, opacity1, 0);
+  c1 = color(opacity1-30, 0, opacity1);
+  c2 = color(opacity1, opacity1/5, 0);
   setGradient(c1, c2);      
   chase();   
   textSize(18);
@@ -121,7 +122,7 @@ function draw() {
  
   
   /////// DEBUG UI ///////////
-  /*
+  
   text('my ID: ' + (numericId),30,50);
 
   text('bar1: ' + (bar1),30,110);
@@ -134,7 +135,7 @@ function draw() {
   
   text('face reading 1: ' + (readFace1),30,240);
   text('face reading 2: ' + (readFace2),30,260);
-*/
+
 
   
 
@@ -157,11 +158,11 @@ function chase(){
       chaseBar2 -= 2*chaseSpeed;
     }
 
-    if (chaseBarCollective <= (bar1+bar2)/2+(chaseSpeed/2)){
-    chaseBarCollective += chaseSpeed/3;
+    if (chaseBarCollective <= barCollective+(chaseSpeed*2)){
+    chaseBarCollective += chaseSpeed*2;
       }
-    else if (chaseBarCollective >= (bar1+bar2)/2+(chaseSpeed/8)){
-    chaseBarCollective -= chaseSpeed/10;
+    else if (chaseBarCollective >= barCollective+chaseSpeed){
+    chaseBarCollective -= chaseSpeed;
       }
 
 }
@@ -169,6 +170,6 @@ function chase(){
 
 
 function backgroundOpacity () {
-  opacity1 = map(chaseBarCollective,0,1000,220,70);
+  opacity1 = map(chaseBarCollective,0,1000,50,255);
 }
 

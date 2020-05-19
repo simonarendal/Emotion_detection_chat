@@ -27,14 +27,12 @@ body, html {
     background-color: black;
     overflow: hidden;
     border-radius: 100%;
-
+ 
 }
 
 
 #publisher {
     position: absolute;
-    bottom: 10px;
-    left: 60%;
     z-index: 101;
     border: 3px solid white;
     border-radius: 50%;

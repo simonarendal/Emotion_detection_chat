@@ -28,7 +28,7 @@ class Ellipse {
   
   //draw ellipse at every x,y point
   noStroke();
-  fill(255, 40,0,opacity); 
+  fill(101, 55, 111,opacity); 
   ellipse(x, y, 30, 30);
     
     }
