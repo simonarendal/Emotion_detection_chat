@@ -103,7 +103,7 @@ function draw() {
     strokeWeight(1);
     stroke(0,0,0);
     textSize(25);
-    text('Cannot read face!',(width/2)-100,55);
+    text('Cannot read face!',50,55);
   }
 
   if(readFace2 === false && numericId === 2){
