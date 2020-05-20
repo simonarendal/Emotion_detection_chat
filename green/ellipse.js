@@ -18,7 +18,7 @@ class Ellipse {
   //translate(width/2, height/2);
   let opacity; 
   if(show >= 1000/circlesSubscriber.length){
-    opacity = 255;
+    opacity = 205;
   }
   else opacity = 0;
   

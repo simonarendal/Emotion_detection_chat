@@ -37,7 +37,7 @@ function setup() {
 }
 
 function drawSubscriber(){
-  fill(200,200,200);
+  fill(200,200,200,50);
   noStroke();
     ellipse((width/2), (height/2), 509,509);
     fill(0, 0, 0);
@@ -47,8 +47,6 @@ function drawSubscriber(){
     fill(255);
     textSize(16);
     text("Her er din date", this.x-10, this.y);
-    fill(200,200,200,50);
-    ellipse((width/2), (height/2), 529,529);
 
 }
 
@@ -173,6 +171,6 @@ function chase(){
 
 
 function backgroundOpacity () {
-  opacity1 = map(chaseBarCollective,0,1000,50,255);
+  opacity1 = map(chaseBarCollective,100,1000,50,255);
 }
 
