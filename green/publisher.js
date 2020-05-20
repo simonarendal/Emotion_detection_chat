@@ -19,7 +19,7 @@ class Publisher {
         textStyle(BOLD);
         textSize(20);
         textFont('Verdana');
-        text("Her er du", this.x-50, this.y);
+        text("Dit smil", this.x-50, this.y);
     }
 
     createCircle(step,show){

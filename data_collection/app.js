@@ -43,7 +43,7 @@ var clientOptions = {
   // Uncomment one of the three following lines to choose your broker
   // var MQTTBrokerUrl = 'ws://iot.eclipse.org:80/ws';
   var MQTTBrokerUrl = "wss://test.mosquitto.org:8081";
-  // var MQTTBrokerUrl = 'ws://broker.hivemq.com:8000';
+  // var MQTTBrokerUrl = "wws://broker.hivemq.com:8081";
   
   // We connect to it in the beginning
   // Be aware that this is not secure because it's public
@@ -54,7 +54,7 @@ var clientOptions = {
   // Make sure that this is very unique, so you only get your own messages
   // I.e. don't name it 'test', but instead 'JesperHyldahlFoghTest'
   //
-  var Topic = "LesiEmotionChat"; // CHANGE THIS TO SOMETHING UNIQUE TO YOUR PROJECT
+  var Topic = "LesiEmotionChat2"; // CHANGE THIS TO SOMETHING UNIQUE TO YOUR PROJECT
   var connectTopic = Topic + "-connect";
   var feedbackTopic = Topic + "-feedback";
   
@@ -88,6 +88,7 @@ client.on("message", function (topic, payload) {
   
     // If we got a payload on the connection topic, do this
     if (topic === connectTopic) {
+      console.log('topic === connectTopic');
       // If we got a payload from someone else than us, and they have the same ID as us
       if (convertedPayload.clientId !== clientOptions.clientId) {
         // We get this message if someone has already claimed this ID
@@ -158,13 +159,13 @@ function playVideo () {
 playVideo();
 
 // replace these values with those generated in your TokBox Account
-/*
+
 var apiKey = "46651242";
 var sessionId =
   "2_MX40NjY1MTI0Mn5-MTU4NjE2NTg3NTI2MH5SaHR4amgvNlRJSHVyNzFWYXEweTh2eWN-fg";
 var token =
   "T1==cGFydG5lcl9pZD00NjY1MTI0MiZzaWc9NWE3YmQxNTg4MTkxZGY1YTNjNmMxMDE3MWQyMTY1NGQ2ZmEzNDQ4YTpzZXNzaW9uX2lkPTJfTVg0ME5qWTFNVEkwTW41LU1UVTROakUyTlRnM05USTJNSDVTYUhSNGFtZ3ZObFJKU0hWeU56RldZWEV3ZVRoMmVXTi1mZyZjcmVhdGVfdGltZT0xNTg2MTY3MzM5Jm5vbmNlPTAuOTQ0MjQ1OTcxNTk0NTU3JnJvbGU9c3Vic2NyaWJlciZleHBpcmVfdGltZT0xNTg2MTcwOTM4JmluaXRpYWxfbGF5b3V0X2NsYXNzX2xpc3Q9";
-*/
+
 // Handling all of our errors here by alerting them
 
 function handleError(error) {
@@ -197,6 +198,7 @@ function initializeSession() {
   // Subscribe to a newly created stream
  
   session.on("streamCreated", function (event) {
+ 
     console.log("New stream in the session: " + event.stream.name);
     
     if(event.stream.name == 1){ 
@@ -244,6 +246,8 @@ function initializeSession() {
               const detections1 = await faceapi.detectAllFaces(videoElement1, new faceapi.TinyFaceDetectorOptions()).withFaceExpressions()
 
               localHappyCounter1 = (detections1[0].expressions.happy);
+              data.push(localHappyCounter1);
+              //console.log(data);
               console.log('happy1: ' + localHappyCounter1);
               readFace1 = true;
 
@@ -280,6 +284,25 @@ function initializeSession() {
           }
 
 
-
-
+          var data = [
+            ['Foo', 'programmer'],
+            ['Bar', 'bus driver'],
+            ['Moo', 'Reindeer Hunter']
+         ];
+          
+          
+         function download_csv() {
+           
+             var csv = 'Name,Value\n';
+             data.forEach(function(row) {
+                     csv += row.join(',');
+                     csv += "\n";
+             });
+             console.log(csv);
+             var hiddenElement = document.createElement('a');
+             hiddenElement.href = 'data:text/csv;charset=utf-8,' + encodeURI(csv);
+             hiddenElement.target = '_blank';
+             hiddenElement.download = 'people.csv';
+             hiddenElement.click();
+         }
 

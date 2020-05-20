@@ -35,7 +35,7 @@ var clientOptions = {
 // Uncomment one of the three following lines to choose your broker
 // var MQTTBrokerUrl = 'ws://iot.eclipse.org:80/ws';
 var MQTTBrokerUrl = "wss://test.mosquitto.org:8081";
-// var MQTTBrokerUrl = 'ws://broker.hivemq.com:8000';
+// var MQTTBrokerUrl = 'wws://broker.hivemq.com:8081';
 
 // We connect to it in the beginning
 // Be aware that this is not secure because it's public
@@ -46,7 +46,7 @@ var client = mqtt.connect(MQTTBrokerUrl, clientOptions);
 // Make sure that this is very unique, so you only get your own messages
 // I.e. don't name it 'test', but instead 'JesperHyldahlFoghTest'
 //
-var Topic = "LesiEmotionChat"; // CHANGE THIS TO SOMETHING UNIQUE TO YOUR PROJECT
+var Topic = "LesiEmotionChat2"; // CHANGE THIS TO SOMETHING UNIQUE TO YOUR PROJECT
 var connectTopic = Topic + "-connect";
 var feedbackTopic = Topic + "-feedback";
 
@@ -160,6 +160,11 @@ client.on("message", function (topic, payload) {
  /////////////////////TOKBOX////////////////////////////////////
 ///////////////////////////////////////////////////////////////
 
+var apiKey = "46651242";
+var sessionId =
+  "2_MX40NjY1MTI0Mn5-MTU4NjE2NTg3NTI2MH5SaHR4amgvNlRJSHVyNzFWYXEweTh2eWN-fg";
+var token =
+  "T1==cGFydG5lcl9pZD00NjY1MTI0MiZzaWc9NWE3YmQxNTg4MTkxZGY1YTNjNmMxMDE3MWQyMTY1NGQ2ZmEzNDQ4YTpzZXNzaW9uX2lkPTJfTVg0ME5qWTFNVEkwTW41LU1UVTROakUyTlRnM05USTJNSDVTYUhSNGFtZ3ZObFJKU0hWeU56RldZWEV3ZVRoMmVXTi1mZyZjcmVhdGVfdGltZT0xNTg2MTY3MzM5Jm5vbmNlPTAuOTQ0MjQ1OTcxNTk0NTU3JnJvbGU9c3Vic2NyaWJlciZleHBpcmVfdGltZT0xNTg2MTcwOTM4JmluaXRpYWxfbGF5b3V0X2NsYXNzX2xpc3Q9";
 
   
 // Handling all of our errors here by alerting them
