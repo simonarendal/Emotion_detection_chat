@@ -131,19 +131,24 @@ function myMap(var1, min1, max1, min2, max2 )
  
 function sendFeedback () {
   //console.log('feedback sent');
+  var mappedHC1 = myMap(localHappyCounter1, 0, 1, 0, 1000);
+  var publishedHC1 = Math.floor(mappedHC1);
+  var mappedHC2 = myMap(localHappyCounter2, 0, 1, 0, 1000);
+  var publishedHC2 = Math.floor(mappedHC2);
     var feedbackPayload = {
         clientId : clientOptions.clientId,
         message : 'FEEDBACK',
-        HC1: int(myMap(localHappyCounter1, 0, 1, 0, 1000)),
-        HC2: int(myMap(localHappyCounter2, 0, 1, 0, 1000)),
-        CHC: int(myMap((localHappyCounter1+localHappyCounter2)/2, 0, 1, 0, 1000)),
+        HC1: publishedHC1,
+        HC2: publishedHC2,
+        CHC: (publishedHC1+publishedHC2)/2,
         RF1: readFace1,
         RF2: readFace2
       
     };
    
-    client.publish(feedbackTopic, JSON.stringify(feedbackPayload));
-}    
+      client.publish(feedbackTopic, JSON.stringify(feedbackPayload));
+      console.log(' Entry : ' + publishedHC1 + ' : ' + publishedHC2 + ' : ');
+    }    
 
 
   ///////////////////////////////////////////////////////////////
@@ -166,6 +171,8 @@ var sessionId =
 var token =
   "T1==cGFydG5lcl9pZD00NjY1MTI0MiZzaWc9NWE3YmQxNTg4MTkxZGY1YTNjNmMxMDE3MWQyMTY1NGQ2ZmEzNDQ4YTpzZXNzaW9uX2lkPTJfTVg0ME5qWTFNVEkwTW41LU1UVTROakUyTlRnM05USTJNSDVTYUhSNGFtZ3ZObFJKU0hWeU56RldZWEV3ZVRoMmVXTi1mZyZjcmVhdGVfdGltZT0xNTg2MTY3MzM5Jm5vbmNlPTAuOTQ0MjQ1OTcxNTk0NTU3JnJvbGU9c3Vic2NyaWJlciZleHBpcmVfdGltZT0xNTg2MTcwOTM4JmluaXRpYWxfbGF5b3V0X2NsYXNzX2xpc3Q9";
 
+  var streamName1;
+  var streamName2;
 // Handling all of our errors here by alerting them
 
 function handleError(error) {
@@ -198,14 +205,15 @@ function initializeSession() {
   // Subscribe to a newly created stream
  
   session.on("streamCreated", function (event) {
- 
     console.log("New stream in the session: " + event.stream.name);
-     if(event.stream.name == 1){ 
+    
+    if(event.stream.name == 1){
+      streamName1 = event.stream.name;
       console.log('stream1');
+     
       var subscriber = session.subscribe(event.stream, { insertDefaultUI: false });
-      subscriber.subscribeToAudio(false);
-      subscriber.setPreferredFrameRate(3);
-      subscriber.setPreferredResolution(320,240);
+      subscriber.subscribeToAudio(false);  
+     
       subscriber.on('videoElementCreated', function (event) {
       videoElement1 = document.getElementById('subscriber1').appendChild(event.element);
       })
@@ -216,10 +224,11 @@ function initializeSession() {
     
     if(event.stream.name == 2){ 
       console.log('stream2');
+      streamName2 = event.stream.name;
+     
       var subscriber = session.subscribe(event.stream, { insertDefaultUI: false });
-      subscriber.subscribeToAudio(false);
-      subscriber.setPreferredFrameRate(3);
-      subscriber.setPreferredResolution(320,240);
+      subscriber.subscribeToAudio(false);  
+      
       subscriber.on('videoElementCreated', function (event) {
       videoElement2 = document.getElementById('subscriber2').appendChild(event.element);
       })
@@ -251,9 +260,6 @@ function initializeSession() {
               const detections1 = await faceapi.detectAllFaces(videoElement1, new faceapi.TinyFaceDetectorOptions()).withFaceExpressions()
 
               localHappyCounter1 = (detections1[0].expressions.happy);
-              data.push(localHappyCounter1);
-              //console.log(data);
-              console.log('happy1: ' + localHappyCounter1);
               readFace1 = true;
 
             }
@@ -261,7 +267,7 @@ function initializeSession() {
             catch (err) {
               localHappyCounter1 = 0;
               readFace1 = false;
-              console.log('readFace1 false');
+              //console.log('readFace1 false');
              
             }
             sendFeedback();
@@ -275,39 +281,21 @@ function initializeSession() {
               const detections2 = await faceapi.detectAllFaces(videoElement2, new faceapi.TinyFaceDetectorOptions()).withFaceExpressions()
 
               localHappyCounter2 = (detections2[0].expressions.happy);
-              console.log('happy2: ' + localHappyCounter2);
               readFace2 = true;
+              
 
             }
 
             catch (err) {
               localHappyCounter2 = 0;
               readFace2 = false;
-              console.log('readFace2 false');
+              //console.log('readFace2 false');
             }
             sendFeedback();
           }
 
 
-          var data = [
-            ['Foo', 'programmer'],
-            ['Bar', 'bus driver'],
-            ['Moo', 'Reindeer Hunter']
-         ];
+       
           
-          
-         function download_csv() {
-           
-             var csv = 'Name,Value\n';
-             data.forEach(function(row) {
-                     csv += row.join(',');
-                     csv += "\n";
-             });
-             console.log(csv);
-             var hiddenElement = document.createElement('a');
-             hiddenElement.href = 'data:text/csv;charset=utf-8,' + encodeURI(csv);
-             hiddenElement.target = '_blank';
-             hiddenElement.download = 'people.csv';
-             hiddenElement.click();
-         }
+        
 

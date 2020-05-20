@@ -14,8 +14,8 @@ var yValue2 = 0;
     fill(0,0,0);
     textSize(32);
     fill(255,255,255);
-    text('PARTICIPANT1: ', 30,30);
-    text('PARTICIPANT2: ', 30,80);
+    text('PARTICIPANT1: ' + streamName1,30,30);
+    text('PARTICIPANT2: ' + streamName2, 30,80);
 
     textSize(20);
     text('participant 1: ', 30, 100);
