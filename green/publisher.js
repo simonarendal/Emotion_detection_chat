@@ -4,14 +4,14 @@ class Publisher {
         this.r = 105;
         this.w = 200; 
         this.h = 200;
-        this.x = (width/2) - 240;
-        this.y = (height/2)+(240);
+        this.x = (width/2) - 260;
+        this.y = (height/2)+(260);
     }
 
 
     drawPublisher(){
       noStroke();
-      fill(200,200,200);
+      fill(200,200,200,50);
         ellipse(this.x, this.y, this.w+20, this.h+20);
         fill(216, 69, 86);
         ellipse(this.x, this.y, this.w, this.h);
@@ -27,7 +27,7 @@ class Publisher {
         //translate(width/2, height/2);
         let opacity; 
         if(show >= 1000/circlesPublisher.length){
-          opacity = 255;
+          opacity = 205;
         }
         else opacity = 0;
         
