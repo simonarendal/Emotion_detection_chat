@@ -6,7 +6,7 @@
   <link href="login-page.css" rel="stylesheet" type="text/css">
   <style>
     video {margin: 0 auto;}
-    h2 {text-align:center;}
+    h2 {text-align:center; padding-top: 1%;}
     p {margin: auto;}
     form { justify-items: center;   display: grid;}
     input {margin-top: 10px;}
@@ -21,13 +21,15 @@
 <body>
   <script defer type="text/javascript" src="sketch.js"></script>
   <div>
-    <h2 id="login-header">Hej Peter og Naomi, Tak fordi I vil hjælpe os!</h2>
+    <h2 id="login-header" style="color:purple;">Hej Peter og Naomi, Tak fordi I vil hjælpe os! </h2>
   </div>
 
-  <div>
+  <div class = "videoContainer">
+  <div class="module-border-wrap">
   <video id="video" width="200px" height="200px" style = "display:flex;"  autoplay muted></video>
   </div>
-  
+  </div>
+
   <form id="login-form">
     <input type="password" name="password" id="password-field" class="login-form-field" placeholder="Skriv kodeord her">
     <input type="submit" value="Login" id="login-form-submit">

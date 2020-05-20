@@ -4,8 +4,9 @@ const loginErrorMsg = document.getElementById("login-error-msg");
 const video = document.getElementById('video');
 var expression;
 var readFace = false;
-
+var c1, c2;
 var roomName = 'green';
+
 Promise.all([
   faceapi.nets.tinyFaceDetector.loadFromUri('./green/models'),
   faceapi.nets.faceLandmark68Net.loadFromUri('./green/models'),
@@ -29,29 +30,32 @@ if (navigator.mediaDevices.getUserMedia) {
 
 function setup() {
     canvas = createCanvas(windowWidth, windowHeight);
+    c1 = color(50, 0, 255);
+    c2 = color(255, 50 , 0);
+
 }
 
 function draw() {
-background(255,255,255);  
+background(255,255,255);
+
+
 var expression1 = parseFloat(expression).toFixed(3);
 textSize(18);
 textAlign(CENTER,TOP);
 fill(100, 255, 100);
 text('Happy scale:' + (expression1), 0, 0, windowWidth);
 
-fill(0, 0, 0);
+fill(128, 0, 128);
 
-text('Når klokken er 20.00, log venligst ind med kodeordet "green"', windowWidth/2,50)
-text('Herfra vil I kunne se (og tale med) hinanden og få live-data omkring jeres smil!', windowWidth/2,75)
+text('Når klokken er 20.00, log venligst ind med kodeordet "green"', windowWidth/2,55)
+text('Herfra vil I kunne se (og tale med) hinanden og få live-data omkring jeres smil!', windowWidth/2,80)
 
 textSize(14);
-text('Husk at give browseren tilladelse til at tilgå jeres webcam og mikrofon', windowWidth/2,105)
-text('Tjek at lysforholdene er gode - dvs. sørg for at der er nok lys, og undgå modlys', windowWidth/2,130)
-text('Programmet kan tage lidt tid om at loade, så giv det lige 30 sekunder', windowWidth/2,155)  
-text('Efter interviewet vil Naomi blive interviewet først, og hun skal derfor blive på platformen', windowWidth/2,180)    
-text('Peter vil få en besked når det er hans tur til at blive interviewet', windowWidth/2,205)
+text('Husk at give browseren tilladelse til at tilgå jeres webcam og mikrofon', windowWidth/2,100)
+text('Tjek at lysforholdene er gode - dvs. sørg for at der er nok lys, og undgå modlys', windowWidth/2,125)
+text('Programmet kan tage lidt tid om at loade, så giv det lige 30 sekunder', windowWidth/2,150)  
 textSize(20);
-text('Rigtig god fornøjelse!', windowWidth/2,240)    
+text('Rigtig god fornøjelse!', windowWidth/2,180)    
 
 //text('Ulf will stay on the platform after the date ends. Lif will receive facebook pm when her turn to be interviewed.', windowWidth/2,180)    
 //text('Husk at trykke "OK", når du bliver spurgt om du tillader, at vi gør brug af webcam og mikrofon', windowWidth/2,80) 
@@ -61,7 +65,7 @@ text('Rigtig god fornøjelse!', windowWidth/2,240)
 
 if(readFace === false){
  fill(255,0,0);
- text('Cannot read face!',windowWidth/2,30);
+ text('Cannot read face!',windowWidth/2,25);
   }
 
 }
@@ -108,3 +112,16 @@ loginButton.addEventListener("click", (e) => {
       loginErrorMsg.style.opacity = 1;
   }
 })
+
+
+function setGradient(c1, c2) {
+  // noprotect
+  noFill();
+  for (var opacity = 0; opacity < height; opacity++) {
+    var inter = map(opacity, 0, height, 0, 1);
+    var c = lerpColor(c1, c2, inter);
+    stroke(c);
+    line(0, opacity, width, opacity);
+  }
+}
+
